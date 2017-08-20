@@ -4,7 +4,7 @@ import { View, ScrollView, TouchableOpacity } from 'react-native';
 import styles from '../../styles';
 import TextInput from '../../components/text-input';
 import Text from '../../components/text';
-import Button from '../../components/button';
+import Button, { InlineButton } from '../../components/button';
 import * as actions from './action-creators';
 import { connect } from 'react-redux';
 
@@ -45,6 +45,7 @@ class LoginScreen extends Component {
             <Text>{this.state.message}</Text>
           </View>
         }
+        <Text>Log in to your wallet</Text>
         <TextInput
           placeholder="Enter your private key here (WIF)"
           value={this.state.wif}
@@ -52,13 +53,24 @@ class LoginScreen extends Component {
           returnKeyType="done"
           onSubmitEditing={this.handleSubmit}
         />
-        <View style={{ marginTop: 20 }}>
+        <View style={{
+          flex: 1,
+          flexDirection: 'row',
+          marginTop: 10,
+        }}>
           <Button type="primary" onPress={this.handleSubmit}>
             Log in
           </Button>
-          <Button onPress={() => this.props.navigation.navigate('NewWallet')}>
-            Create New Wallet
-          </Button>
+        </View>
+        <View style={{
+          flex: 1,
+          flexDirection: 'row',
+          marginTop: 20,
+        }}>
+          <Text>Need a wallet?</Text>
+          <InlineButton onPress={() => this.props.navigation.navigate('NewWallet')}>
+            New Wallet
+          </InlineButton>
         </View>
       </KeyboardAwareScrollView>
     );

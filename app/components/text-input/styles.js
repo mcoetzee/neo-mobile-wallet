@@ -7,7 +7,6 @@ export default StyleSheet.create({
   container: {
     borderBottomColor: colors.grey,
     borderBottomWidth: Platform.OS === 'ios' ? StyleSheet.hairlineWidth : 0,
-    marginTop: 15,
   },
   input: {
     width: window.width,

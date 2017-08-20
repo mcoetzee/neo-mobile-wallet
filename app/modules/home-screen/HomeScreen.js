@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StatusBar } from 'react-native';
+import { View, ScrollView, StatusBar, RefreshControl, StyleSheet } from 'react-native';
 import Text from '../../components/text';
 import Button from '../../components/button';
-import styles from '../../styles';
+import styles, { colors } from '../../styles';
+import screenStyles from './styles';
 import * as actions from './action-creators';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -17,11 +18,16 @@ export class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = { loading: true };
+    this.handleLoad = this.handleLoad.bind(this);
   }
 
   componentDidMount() {
-    StatusBar.setBarStyle('light-content');
+    // StatusBar.setBarStyle('light-content');
+    this.handleLoad();
+  }
 
+  handleLoad() {
+    this.setState({ loading: true });
     const { loadBalance, loadTransactionHistory, network, address } = this.props;
     Promise.all([
       loadBalance(network, address.public),
@@ -49,17 +55,41 @@ export class HomeScreen extends Component {
 
   render() {
     return (
-      <View style={styles.screenContainer}>
-        <ScrollView>
-          <Spinner visible={this.state.loading} overlayColor="rgba(14, 18, 22, 0.89)"/>
-          <Text>NEO: {this.props.balance.neo}</Text>
-          <Text>GAS: {this.props.balance.gas}</Text>
-          <Button type="primary">Refresh</Button>
-
-          <Text>Your Wallet Adress:</Text>
-          <Text type="secondary">{this.props.address.public}</Text>
-        </ScrollView>
+      <ScrollView style={styles.screenContainer}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.loading}
+            onRefresh={this.handleLoad}
+          />
+        }
+      >
+        <Spinner visible={false} overlayColor="rgba(14, 18, 22, 0.89)"/>
+        <View style={{
+          flex: 1,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <View style={{ width: 150 }}>
+          <Text type="primary" style={screenStyles.symbol}>NEO</Text>
+          <Text style={screenStyles.amount}>{this.props.balance.neo}</Text>
+        </View>
+        <View style={{ width: 150 }}>
+          <Text type="primary" style={screenStyles.symbol}>GAS</Text>
+          <Text style={screenStyles.amount}>{this.props.balance.gas}</Text>
+        </View>
       </View>
+      <View style={{ paddingTop: 20 }}>
+        <Text type="secondary" style={screenStyles.symbol}>
+          US $17,003.45
+        </Text>
+      </View>
+      <View style={{ paddingTop: 20 }}>
+        <Button type="primary">Claim 0 GAS</Button>
+      </View>
+      <Text>Your Public Neo Adress:</Text>
+      <Text type="secondary">{this.props.address.public}</Text>
+    </ScrollView>
     );
   }
 }
