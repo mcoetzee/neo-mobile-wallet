@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { View, TextInput } from 'react-native';
 
 import styles from './styles';
+import { colors } from '../../styles';
 
-class CustomInput extends Component {
+export default class CustomInput extends Component {
   focus = () => {
     this.input.focus();
   };
@@ -15,6 +16,7 @@ class CustomInput extends Component {
           autoCapitalize="none"
           autoCorrect={false}
           style={styles.input}
+          placeholderTextColor={colors.grey}
           ref={(input) => this.input = input}
           {...this.props}
         />
@@ -22,5 +24,3 @@ class CustomInput extends Component {
     );
   }
 }
-
-export default CustomInput;

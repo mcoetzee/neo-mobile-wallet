@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { View, ScrollView, TouchableOpacity, Text } from 'react-native';
+import { View, ScrollView, TouchableOpacity } from 'react-native';
+import styles from '../../styles';
 import TextInput from '../../components/text-input';
+import Text from '../../components/text';
+import Button from '../../components/button';
 import * as actions from './action-creators';
 import { connect } from 'react-redux';
 
 class LoginScreen extends Component {
+  static navigationOptions = {
+    title: <Text>Neo</Text>,
+    headerStyle: styles.screenHeader
+  }
+
   constructor(props) {
     super(props);
     this.state = { wif: '', message: '' };
@@ -31,7 +39,7 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView style={styles.screenContainer}>
         {!!this.state.message &&
           <View style={{ marginTop: 20 }}>
             <Text>{this.state.message}</Text>
@@ -45,14 +53,12 @@ class LoginScreen extends Component {
           onSubmitEditing={this.handleSubmit}
         />
         <View style={{ marginTop: 20 }}>
-          <TouchableOpacity onPress={this.handleSubmit}>
-            <Text>Log in</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{ marginTop: 20 }}>
-          <TouchableOpacity onPress={() => this.props.navigation.navigate('NewWallet')}>
-            <Text>Create New Wallet</Text>
-          </TouchableOpacity>
+          <Button type="primary" onPress={this.handleSubmit}>
+            Log in
+          </Button>
+          <Button onPress={() => this.props.navigation.navigate('NewWallet')}>
+            Create New Wallet
+          </Button>
         </View>
       </KeyboardAwareScrollView>
     );
