@@ -28,10 +28,12 @@ export class HomeScreen extends Component {
 
   handleLoad() {
     this.setState({ loading: true });
-    const { loadBalance, loadTransactionHistory, network, address } = this.props;
+    const { loadBalance, loadTransactionHistory, loadNeoMarketData, loadGasMarketData, network, address } = this.props;
     Promise.all([
       loadBalance(network, address.public),
-      loadTransactionHistory(network, address.public)
+      loadTransactionHistory(network, address.public),
+      loadNeoMarketData(),
+      loadGasMarketData()
     ]).then(() => {
       this.setState({ loading: false });
     })
@@ -53,7 +55,19 @@ export class HomeScreen extends Component {
     }
   }
 
+  getTotalUSDValue() {
+    const { balance, markets } = this.props;
+    if (balance.neo && balance.gas && markets.neo.price_usd && markets.gas.price_usd) {
+      return (
+        balance.neo * parseFloat(markets.neo.price_usd) +
+        balance.gas * parseFloat(markets.gas.price_usd)
+      ).toFixed(2).toString();
+    }
+    return '-';
+  }
+
   render() {
+    const { balance } = this.props;
     return (
       <ScrollView style={styles.screenContainer}
         refreshControl={
@@ -72,16 +86,16 @@ export class HomeScreen extends Component {
         }}>
         <View style={{ width: 150 }}>
           <Text type="primary" style={screenStyles.symbol}>NEO</Text>
-          <Text style={screenStyles.amount}>{this.props.balance.neo}</Text>
+          <Text style={screenStyles.amount}>{balance.neo}</Text>
         </View>
         <View style={{ width: 150 }}>
           <Text type="primary" style={screenStyles.symbol}>GAS</Text>
-          <Text style={screenStyles.amount}>{this.props.balance.gas}</Text>
+          <Text style={screenStyles.amount}>{balance.gas && balance.gas.toFixed(3)}</Text>
         </View>
       </View>
       <View style={{ paddingTop: 20 }}>
         <Text type="secondary" style={screenStyles.symbol}>
-          US $17,003.45
+          US ${this.getTotalUSDValue()}
         </Text>
       </View>
       <View style={{ paddingTop: 20 }}>
@@ -99,7 +113,8 @@ const mapStateToProps = state => {
     address: state.data.wallet.address,
     balance: state.data.wallet.balance,
     transactions: state.data.wallet.transactions,
-    network: state.data.network
+    network: state.data.network,
+    markets: state.data.markets
   };
 }
 
