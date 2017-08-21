@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, ScrollView, StatusBar, RefreshControl, StyleSheet } from 'react-native';
 import Text from '../../components/text';
 import Button from '../../components/button';
+import Row from '../../components/row';
 import styles, { colors } from '../../styles';
 import screenStyles from './styles';
 import * as actions from './action-creators';
@@ -12,8 +13,9 @@ import Markets from './Markets';
 
 export class HomeScreen extends Component {
   static navigationOptions = {
-    title: <Text>Home</Text>,
-    headerStyle: styles.screenHeader
+    title: 'Home',
+    headerStyle: styles.screenHeader,
+    headerTitleStyle: { color: 'white' }
   }
 
   constructor(props) {
@@ -101,8 +103,12 @@ export class HomeScreen extends Component {
         </View>
 
         <View style={{ paddingTop: 20 }}>
-          <Text>Your Public Neo Adress:</Text>
-          <Text type="secondary">{this.props.address.public}</Text>
+          <Row onPress={() => this.props.navigation.navigate('PublicAddress')}>
+            <View>
+              <Text>Your Public Neo Adress:</Text>
+              <Text type="secondary">{this.props.address.public}</Text>
+            </View>
+          </Row>
         </View>
 
         <View style={{ flex: 1, flexDirection: 'row', marginTop: 20 }}>

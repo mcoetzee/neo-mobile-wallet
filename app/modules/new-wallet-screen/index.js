@@ -5,8 +5,9 @@ import styles from '../../styles';
 
 export default class NewWalletScreen extends Component {
   static navigationOptions = {
-    title: <Text>New Wallet</Text>,
-    headerStyle: styles.screenHeader
+    title: 'New Wallet',
+    headerStyle: styles.screenHeader,
+    headerTitleStyle: { color: 'white' }
   }
 
   render() {

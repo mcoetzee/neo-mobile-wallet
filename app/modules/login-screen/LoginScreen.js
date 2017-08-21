@@ -10,8 +10,9 @@ import { connect } from 'react-redux';
 
 class LoginScreen extends Component {
   static navigationOptions = {
-    title: <Text>Neo</Text>,
-    headerStyle: styles.screenHeader
+    title: 'Neo',
+    headerStyle: styles.screenHeader,
+    headerTitleStyle: { color: 'white' }
   }
 
   constructor(props) {
