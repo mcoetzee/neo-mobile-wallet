@@ -6,6 +6,7 @@ export const colors = {
   white: '#fff',
   grey: 'rgb(136, 136, 136)',
   halfGrey: 'rgba(136, 136, 136, 0.3)',
+  quarterGrey: 'rgba(136, 136, 136, 0.1)',
   border: '#cccccc',
   grayBackground: '#f9fafb',
   rowUnderlay: 'rgba(154, 154, 154, 0.25)',

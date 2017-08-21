@@ -14,7 +14,7 @@ export default function Row({ children, onPress }) {
   return (
     <TouchableHighlight
       onPress={onPress}
-      underlayColor={colors.grey}
+      underlayColor={colors.quarterGrey}
     >
       <View style={styles.row}>
         {children}

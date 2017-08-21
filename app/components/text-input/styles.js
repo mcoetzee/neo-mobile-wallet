@@ -12,5 +12,6 @@ export default StyleSheet.create({
     width: window.width,
     height: 40,
     color: colors.white,
+    paddingRight: 10,
   },
 });

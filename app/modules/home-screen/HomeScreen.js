@@ -25,7 +25,7 @@ export class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    // StatusBar.setBarStyle('light-content');
+    StatusBar.setBarStyle('light-content');
     this.handleLoad();
   }
 

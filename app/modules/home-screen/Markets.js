@@ -22,7 +22,7 @@ export default function Markets({ neo, gas }) {
         <Text style={textStyle}>% Change 7d</Text>
       </View>
       <View style={{ width: '33%' }}>
-        <Text style={textStyle}>NEO</Text>
+        <Text style={[textStyle, { color: 'white' }]}>NEO</Text>
         <Text style={textStyle}>{neo.price_usd}</Text>
         <Text style={textStyle}>{neo.price_btc}</Text>
         <Text style={textStyle}>{neo.market_cap_usd}</Text>
@@ -31,7 +31,7 @@ export default function Markets({ neo, gas }) {
         <Text style={textStyle}>{neo.percent_change_7d}%</Text>
       </View>
       <View style={{ width: '33%' }}>
-        <Text style={textStyle}>GAS</Text>
+        <Text style={[textStyle, { color: 'white' }]}>GAS</Text>
         <Text style={textStyle}>{gas.price_usd}</Text>
         <Text style={textStyle}>{gas.price_btc}</Text>
         <Text style={textStyle}>{gas.market_cap_usd}</Text>
