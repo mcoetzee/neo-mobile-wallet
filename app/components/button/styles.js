@@ -5,7 +5,6 @@ const primary = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
   },
   button: {
     borderColor: colors.primaryGreen,

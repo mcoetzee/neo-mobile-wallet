@@ -8,6 +8,7 @@ import * as actions from './action-creators';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-root-toast';
+import Markets from './Markets';
 
 export class HomeScreen extends Component {
   static navigationOptions = {
@@ -67,7 +68,7 @@ export class HomeScreen extends Component {
   }
 
   render() {
-    const { balance } = this.props;
+    const { balance, markets } = this.props;
     return (
       <ScrollView style={styles.screenContainer}
         refreshControl={
@@ -78,32 +79,36 @@ export class HomeScreen extends Component {
         }
       >
         <Spinner visible={false} overlayColor="rgba(14, 18, 22, 0.89)"/>
-        <View style={{
-          flex: 1,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <View style={{ width: 150 }}>
-          <Text type="primary" style={screenStyles.symbol}>NEO</Text>
-          <Text style={screenStyles.amount}>{balance.neo}</Text>
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+          <View style={{ width: 150 }}>
+            <Text type="primary" style={screenStyles.symbol}>NEO</Text>
+            <Text style={screenStyles.amount}>{balance.neo}</Text>
+          </View>
+          <View style={{ width: 150 }}>
+            <Text type="primary" style={screenStyles.symbol}>GAS</Text>
+            <Text style={screenStyles.amount}>{balance.gas && balance.gas.toFixed(3)}</Text>
+          </View>
         </View>
-        <View style={{ width: 150 }}>
-          <Text type="primary" style={screenStyles.symbol}>GAS</Text>
-          <Text style={screenStyles.amount}>{balance.gas && balance.gas.toFixed(3)}</Text>
+
+        <View style={{ paddingTop: 20 }}>
+          <Text type="secondary" style={screenStyles.symbol}>
+            US ${this.getTotalUSDValue()}
+          </Text>
         </View>
-      </View>
-      <View style={{ paddingTop: 20 }}>
-        <Text type="secondary" style={screenStyles.symbol}>
-          US ${this.getTotalUSDValue()}
-        </Text>
-      </View>
-      <View style={{ paddingTop: 20 }}>
-        <Button type="primary">Claim 0 GAS</Button>
-      </View>
-      <Text>Your Public Neo Adress:</Text>
-      <Text type="secondary">{this.props.address.public}</Text>
-    </ScrollView>
+
+        <View style={{ paddingTop: 20 }}>
+          <Button type="primary">Claim 0 GAS</Button>
+        </View>
+
+        <View style={{ paddingTop: 20 }}>
+          <Text>Your Public Neo Adress:</Text>
+          <Text type="secondary">{this.props.address.public}</Text>
+        </View>
+
+        <View style={{ flex: 1, flexDirection: 'row', marginTop: 20 }}>
+          <Markets neo={markets.neo} gas={markets.gas} />
+        </View>
+      </ScrollView>
     );
   }
 }
