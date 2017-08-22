@@ -43,7 +43,7 @@ function balance(state = {}, action) {
   }
 }
 
-function transactions(state = {}, action) {
+function transactions(state = { data: [] }, action) {
   switch (action.type) {
     case c.LOAD_TRANSACTION_HISTORY:
       return { ...state, loading: true };

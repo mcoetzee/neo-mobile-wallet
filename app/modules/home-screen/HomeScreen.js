@@ -10,12 +10,20 @@ import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-root-toast';
 import Markets from './Markets';
+import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
 export class HomeScreen extends Component {
   static navigationOptions = {
     title: 'Home',
     headerStyle: styles.screenHeader,
-    headerTitleStyle: { color: 'white' }
+    headerTitleStyle: { color: 'white' },
+    tabBarIcon: ({ tintColor }) => (
+      <LineIcon
+        name="home"
+        size={22}
+        color={tintColor}
+      />
+    ),
   }
 
   constructor(props) {
@@ -34,7 +42,7 @@ export class HomeScreen extends Component {
     const { loadBalance, loadTransactionHistory, loadNeoMarketData, loadGasMarketData, network, address } = this.props;
     Promise.all([
       loadBalance(network, address.public),
-      loadTransactionHistory(network, address.public),
+      // loadTransactionHistory(network, address.public),
       loadNeoMarketData(),
       loadGasMarketData()
     ]).then(() => {
