@@ -28,6 +28,15 @@ export function loadBalance(network, address) {
   };
 }
 
+export function loadGasClaim(network, address) {
+  return dispatch => {
+    dispatch({ type: c.LOAD_GAS_CLAIM });
+    return WalletService.getClaimAmounts(network, address)
+      .then(response => dispatch({ type: c.LOAD_GAS_CLAIM_RESPONSE, payload: response }))
+      .catch(err => dispatch({ type: c.LOAD_GAS_CLAIM_RESPONSE, error: true, payload: err }));
+  };
+}
+
 export function loadTransactionHistory(network, address) {
   return dispatch => {
     dispatch({ type: c.LOAD_TRANSACTION_HISTORY });

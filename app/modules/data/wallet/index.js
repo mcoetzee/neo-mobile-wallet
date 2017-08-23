@@ -48,6 +48,29 @@ function balance(state = {}, action) {
   }
 }
 
+function claim(state = {}, action) {
+  switch (action.type) {
+    case c.LOAD_GAS_CLAIM:
+      return { ...state, loading: true };
+
+    case c.LOAD_GAS_CLAIM_RESPONSE:
+      if (action.error) {
+        return { ...state, loading: false, error: true };
+      }
+
+      return {
+        ...state,
+        loading: false,
+        updatedAt: new Date().toLocaleString(),
+        amount: (action.payload.available + action.payload.unavailable) / 100000000,
+        ...action.payload
+      };
+
+    default:
+      return state;
+  }
+}
+
 function transactions(state = { data: [] }, action) {
   switch (action.type) {
     case c.LOAD_TRANSACTION_HISTORY:
@@ -69,4 +92,4 @@ function transactions(state = { data: [] }, action) {
   }
 }
 
-export default combineReducers({ address, balance, transactions });
+export default combineReducers({ address, balance, claim, transactions });

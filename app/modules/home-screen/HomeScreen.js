@@ -33,9 +33,10 @@ export class HomeScreen extends Component {
 
   handleLoad() {
     this.setState({ loading: true });
-    const { loadBalance, loadNeoMarketData, loadGasMarketData, network, address } = this.props;
+    const { loadBalance, loadGasClaim, loadNeoMarketData, loadGasMarketData, network, address } = this.props;
     Promise.all([
       loadBalance(network, address.public),
+      loadGasClaim(network, address.public),
       loadNeoMarketData(),
       loadGasMarketData()
     ]).then(() => {
@@ -71,7 +72,7 @@ export class HomeScreen extends Component {
   }
 
   render() {
-    const { balance, markets } = this.props;
+    const { balance, claim, markets } = this.props;
     return (
       <ScrollView style={styles.screenContainer}
         refreshControl={
@@ -100,7 +101,7 @@ export class HomeScreen extends Component {
         </View>
 
         <View style={{ paddingTop: 20 }}>
-          <Button type="primary">Claim 0 GAS</Button>
+          <Button type="primary" disabled={!claim.amount}>Claim {claim.amount} GAS</Button>
         </View>
 
         <View style={{ paddingTop: 20 }}>
@@ -124,6 +125,7 @@ const mapStateToProps = state => {
   return {
     address: state.data.wallet.address,
     balance: state.data.wallet.balance,
+    claim: state.data.wallet.claim,
     transactions: state.data.wallet.transactions,
     network: state.data.network,
     markets: state.data.markets

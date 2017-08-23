@@ -30,7 +30,6 @@ export class TransactionsScreen extends Component {
   }
 
   componentDidMount() {
-    // this.props.navigation.setParams({ HeaderConnection: ConnectedHeader });
     this.handleLoad();
   }
 
@@ -60,9 +59,10 @@ export class TransactionsScreen extends Component {
         {transactions.data.map(tx => {
           return (
             <TouchableHighlight
+              key={tx.txid}
               underlayColor={colors.quarterGrey}
             >
-              <View key={tx.txid} style={{ paddingTop: 10, paddingBottom: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.halfGrey }}>
+              <View style={{ paddingTop: 10, paddingBottom: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.halfGrey }}>
                 <Text>{tx.type} {tx.amount}</Text>
                 <Text type="secondary">{tx.txid}</Text>
               </View>
