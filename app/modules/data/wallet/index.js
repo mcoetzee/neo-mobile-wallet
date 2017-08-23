@@ -36,7 +36,12 @@ function balance(state = {}, action) {
       if (action.error) {
         return { ...state, loading: false, error: true };
       }
-      return { ...state, loading: false, ...action.payload };
+      return {
+        ...state,
+        loading: false,
+        updatedAt: new Date().toLocaleString(),
+        ...action.payload
+      };
 
     default:
       return state;
@@ -52,7 +57,12 @@ function transactions(state = { data: [] }, action) {
       if (action.error) {
         return { ...state, loading: false, error: true };
       }
-      return { ...state, loading: false, data: action.payload };
+      return {
+        ...state,
+        loading: false,
+        updatedAt: new Date().toLocaleString(),
+        data: action.payload
+      };
 
     default:
       return state;

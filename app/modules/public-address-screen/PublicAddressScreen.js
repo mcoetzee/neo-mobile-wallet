@@ -11,7 +11,7 @@ export class PublicAddressScreen extends Component {
   static navigationOptions = {
     headerTitle: 'Public Address',
     headerStyle: styles.screenHeader,
-    headerTitleStyle: { color: 'white' }
+    headerTitleStyle: { color: 'white' },
   }
 
   render() {

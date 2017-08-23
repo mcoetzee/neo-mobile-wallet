@@ -7,6 +7,7 @@ import HomeScreen from './modules/home-screen';
 import PublicAddressScreen from './modules/public-address-screen';
 import TransactionsScreen from './modules/transactions-screen';
 import styles, { colors } from './styles';
+import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
 const HomeStack = StackNavigator({
   Home: { screen: HomeScreen },
@@ -18,7 +19,18 @@ const TransactionsStack = StackNavigator({
 });
 
 const HomeTabs = TabNavigator({
-  Home: { screen: HomeStack },
+  Home: {
+    screen: HomeStack,
+    navigationOptions: {
+      tabBarIcon: ({ tintColor }) => (
+        <LineIcon
+          name="home"
+          size={22}
+          color={tintColor}
+        />
+      ),
+    }
+  },
   Transactions: { screen: TransactionsStack },
 }, {
   animationEnabled: false,

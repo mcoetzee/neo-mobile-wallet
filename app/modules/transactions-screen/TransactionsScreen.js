@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
-import { View, ScrollView, RefreshControl, TouchableOpacity } from 'react-native';
-import styles from '../../styles';
+import { Linking, StyleSheet, View, ScrollView, RefreshControl, TouchableHighlight } from 'react-native';
+import styles, { colors } from '../../styles';
 import Text from '../../components/text';
 import Button, { InlineButton } from '../../components/button';
 import { connect } from 'react-redux';
 import * as actions from './action-creators';
-import Icon from 'react-native-vector-icons/Entypo';
+import EntypoIcon from 'react-native-vector-icons/Entypo';
+import Title from './Title';
 
 export class TransactionsScreen extends Component {
   static navigationOptions = {
-    headerTitle: 'Transactions',
     headerStyle: styles.screenHeader,
-    headerTitleStyle: { color: 'white' },
+    headerTitle: (
+      <Title />
+    ),
     tabBarIcon: ({ tintColor }) => (
-      <Icon
+      <EntypoIcon
         name="list"
         size={25}
         color={tintColor}
@@ -24,9 +26,11 @@ export class TransactionsScreen extends Component {
   constructor(props) {
     super(props);
     this.handleLoad = this.handleLoad.bind(this);
+    this.handlePress = this.handlePress.bind(this);
   }
 
   componentDidMount() {
+    // this.props.navigation.setParams({ HeaderConnection: ConnectedHeader });
     this.handleLoad();
   }
 
@@ -35,19 +39,35 @@ export class TransactionsScreen extends Component {
     loadTransactionHistory(network, address.public);
   }
 
+  handlePress(txid) {
+    const api = this.props.network === "MainNet"
+      ? "http://antcha.in"
+      : "http://testnet.antcha.in";
+    Linking.openUrl(`${api}/tx/hash/${txid}`);
+  }
+
   render() {
     const { transactions } = this.props;
     return (
       <ScrollView style={styles.screenContainer}
         refreshControl={
           <RefreshControl
-            refreshing={transactions.loading}
+            refreshing={!!transactions.loading}
             onRefresh={this.handleLoad}
           />
         }
       >
         {transactions.data.map(tx => {
-          return <Text key={tx.txid}>{tx.txid}</Text>;
+          return (
+            <TouchableHighlight
+              underlayColor={colors.quarterGrey}
+            >
+              <View key={tx.txid} style={{ paddingTop: 10, paddingBottom: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.halfGrey }}>
+                <Text>{tx.type} {tx.amount}</Text>
+                <Text type="secondary">{tx.txid}</Text>
+              </View>
+            </TouchableHighlight>
+          );
         })}
       </ScrollView>
     );

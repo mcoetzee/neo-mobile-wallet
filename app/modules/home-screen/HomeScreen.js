@@ -8,22 +8,16 @@ import screenStyles from './styles';
 import * as actions from './action-creators';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Title from './Title';
 import Toast from 'react-native-root-toast';
 import Markets from './Markets';
-import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
 export class HomeScreen extends Component {
   static navigationOptions = {
-    title: 'Home',
     headerStyle: styles.screenHeader,
-    headerTitleStyle: { color: 'white' },
-    tabBarIcon: ({ tintColor }) => (
-      <LineIcon
-        name="home"
-        size={22}
-        color={tintColor}
-      />
-    ),
+    headerTitle: (
+      <Title />
+    )
   }
 
   constructor(props) {
@@ -39,10 +33,9 @@ export class HomeScreen extends Component {
 
   handleLoad() {
     this.setState({ loading: true });
-    const { loadBalance, loadTransactionHistory, loadNeoMarketData, loadGasMarketData, network, address } = this.props;
+    const { loadBalance, loadNeoMarketData, loadGasMarketData, network, address } = this.props;
     Promise.all([
       loadBalance(network, address.public),
-      // loadTransactionHistory(network, address.public),
       loadNeoMarketData(),
       loadGasMarketData()
     ]).then(() => {
@@ -113,7 +106,7 @@ export class HomeScreen extends Component {
         <View style={{ paddingTop: 20 }}>
           <Row onPress={() => this.props.navigation.navigate('PublicAddress')}>
             <View>
-              <Text>Your Public Neo Adress:</Text>
+              <Text>Your Public Neo Address:</Text>
               <Text type="secondary">{this.props.address.public}</Text>
             </View>
           </Row>
