@@ -28,6 +28,27 @@ class SendScreen extends Component {
     this.state = { sending: false, asset: 'Neo', address: '', amount: '', message: '' };
   }
 
+  componentWillReceiveProps(nextProps) {
+    const { response } = nextProps;
+    if (response === this.props.response) {
+      return;
+    }
+    if (response.payload.error) {
+      this.setState({ message: response.payload.error.message || 'Something went wrong processing this transaction' });
+    } else {
+      Toast.show('Transaction complete! Your balance will automatically update when the blockchain has processed it', {
+        duration: 6000,
+        position: Toast.positions.BOTTOM,
+        shadow: false,
+        animation: true,
+        hideOnPress: true,
+        backgroundColor: colors.primaryGreen,
+        textColor: colors.black
+      });
+      this.props.navigation.goBack();
+    }
+  }
+
   handleAddressChange = address => this.setState({ address })
   handleAmountChange = amount => this.setState({ amount })
   handleAssetChange = asset => this.setState({ asset })
@@ -45,36 +66,7 @@ class SendScreen extends Component {
       return;
     }
 
-    this.setState({ sending: true });
-
-    this.props.sendAsset(this.props.network, address, this.props.address.wif, asset, amount)
-      .then(response => {
-        this.setState({ sending: false });
-        if (response.payload.error) {
-          Toast.show('Transaction failed.', {
-            duration: 20000,
-            position: Toast.positions.BOTTOM,
-            shadow: false,
-            animation: true,
-            hideOnPress: true,
-            backgroundColor: colors.orange,
-            textColor: colors.black
-          });
-          this.setState({ message: response.payload.error.message || 'Something went wrong processing this transaction' });
-        } else {
-          this.setState({ amount: '' });
-          Toast.show('Transaction complete! Your balance will automatically update when the blockchain has processed it.', {
-            duration: 6000,
-            position: Toast.positions.BOTTOM,
-            shadow: false,
-            animation: true,
-            hideOnPress: true,
-            backgroundColor: colors.primaryGreen,
-            textColor: colors.black
-          });
-          this.props.navigation.goBack();
-        }
-      });
+    this.props.navigation.navigate('SendConfrm', { address, asset, amount });
   }
 
   render() {
@@ -84,7 +76,7 @@ class SendScreen extends Component {
         <Spinner visible={sending} overlayColor="rgba(14, 18, 22, 0.89)"/>
         {!!message &&
           <View style={{ borderWidth: StyleSheet.hairlineWidth, borderColor: colors.orange, padding: 7 }}>
-            <Text style={{ color: colors.orange }}>{message}</Text>
+            <Text style={{ color: colors.orange }}>Transaction failed. {message}</Text>
           </View>
         }
 
@@ -169,7 +161,7 @@ class SendScreen extends Component {
               />
             }
             style={{ marginRight: 10 }}
-            >
+          >
             Send
           </Button>
         </View>
@@ -194,6 +186,7 @@ const mapStateToProps = state => {
     address: state.data.wallet.address,
     balance: state.data.wallet.balance,
     network: state.data.network,
+    response: {},
   };
 }
 

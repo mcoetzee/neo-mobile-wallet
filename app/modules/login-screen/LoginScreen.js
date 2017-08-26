@@ -7,6 +7,7 @@ import Text from '../../components/text';
 import Button, { InlineButton } from '../../components/button';
 import * as actions from './action-creators';
 import { connect } from 'react-redux';
+import * as Keychain from 'react-native-keychain';
 
 class LoginScreen extends Component {
   static navigationOptions = {
@@ -31,7 +32,17 @@ class LoginScreen extends Component {
         if (response.payload && response.payload.public) {
           // Success
           this.setState({ wif: '', message: '' });
-          this.props.navigation.navigate('Home');
+
+          Keychain.getGenericPassword()
+            .then((credentials) => {
+              if (credentials) {
+                this.props.navigation.navigate('Home');
+              } else {
+                this.props.navigation.navigate('PinCodeSetup');
+              }
+            }).catch((error) => {
+              console.log('Keychain couldn\'t be accessed! Maybe no value set?', error);
+            });
         } else {
           this.setState({ message: 'Could not log in with this key' });
         }
