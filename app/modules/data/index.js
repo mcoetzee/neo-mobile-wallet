@@ -1,10 +1,3 @@
-import { combineReducers } from 'redux';
-import wallet from './wallet';
-import network from './network';
-import markets from './markets';
+import reducer, { slice } from './reducer';
 
-export default combineReducers({
-  wallet,
-  network,
-  markets,
-});
+export { slice, reducer };

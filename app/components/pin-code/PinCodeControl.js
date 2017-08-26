@@ -15,7 +15,7 @@ export default class PinCodeControl extends Component {
     const pills = [];
     for (var i = 0; i < pinLength; i++) {
       pills.push(
-        <View style={styles.pinBox}>
+        <View key={i} style={styles.pinBox}>
           {!!pin.charAt(i) &&
             <Text style={{ color: colors.white, fontSize: 16 }}>•</Text>
           }

@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import data from './data';
+import * as data from './data';
+import * as sendScreen from './send-screen';
 
 export default combineReducers({
-  data
+  [data.slice]: data.reducer,
+  [sendScreen.slice]: sendScreen.reducer,
 });

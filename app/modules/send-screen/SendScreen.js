@@ -9,7 +9,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import TextInput from '../../components/text-input';
 import Text from '../../components/text';
 import Button, { InlineButton } from '../../components/button';
-import * as actions from './action-creators';
 import { connect } from 'react-redux';
 
 class SendScreen extends Component {
@@ -25,7 +24,7 @@ class SendScreen extends Component {
       { title: 'NEO', value: 'Neo' },
       { title: 'GAS', value: 'Gas' },
     ];
-    this.state = { sending: false, asset: 'Neo', address: '', amount: '', message: '' };
+    this.state = { asset: 'Neo', address: '', amount: '', message: '' };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,10 +32,10 @@ class SendScreen extends Component {
     if (response === this.props.response) {
       return;
     }
-    if (response.payload.error) {
-      this.setState({ message: response.payload.error.message || 'Something went wrong processing this transaction' });
+    if (response.error) {
+      this.setState({ message: response.error.message || 'Something went wrong processing this transaction' });
     } else {
-      Toast.show('Transaction complete! Your balance will automatically update when the blockchain has processed it', {
+      Toast.show('Transaction complete! Your balance will update when the blockchain has processed it', {
         duration: 6000,
         position: Toast.positions.BOTTOM,
         shadow: false,
@@ -70,10 +69,10 @@ class SendScreen extends Component {
   }
 
   render() {
-    const { sending, address, asset, amount, addressMessage, amountMessage, message } = this.state;
+    const { address, asset, amount, addressMessage, amountMessage, message } = this.state;
     return (
       <KeyboardAwareScrollView style={styles.screenContainer}>
-        <Spinner visible={sending} overlayColor="rgba(14, 18, 22, 0.89)"/>
+        <Spinner visible={this.props.sending} overlayColor="rgba(14, 18, 22, 0.89)"/>
         {!!message &&
           <View style={{ borderWidth: StyleSheet.hairlineWidth, borderColor: colors.orange, padding: 7 }}>
             <Text style={{ color: colors.orange }}>Transaction failed. {message}</Text>
@@ -183,11 +182,9 @@ const assetStyle = {
 
 const mapStateToProps = state => {
   return {
-    address: state.data.wallet.address,
     balance: state.data.wallet.balance,
-    network: state.data.network,
-    response: {},
+    ...state.sendScreen,
   };
 }
 
-export default connect(mapStateToProps, actions)(SendScreen);
+export default connect(mapStateToProps)(SendScreen);
