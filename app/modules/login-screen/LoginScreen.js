@@ -48,7 +48,7 @@ class LoginScreen extends Component {
         }
         <Text>Log in to your wallet</Text>
         <TextInput
-          placeholder="Enter your private key here (WIF)"
+          placeholder="Enter your private key (WIF)"
           value={this.state.wif}
           onChangeText={text => { this.setState({ wif: text }); }}
           returnKeyType="done"
@@ -66,7 +66,7 @@ class LoginScreen extends Component {
         <View style={{
           flex: 1,
           flexDirection: 'row',
-          marginTop: 20,
+          marginTop: 40,
         }}>
           <Text>Need a wallet?</Text>
           <InlineButton onPress={() => this.props.navigation.navigate('NewWallet')}>

@@ -1,4 +1,4 @@
-import { getAccountsFromWIFKey, generatePrivateKey, getWIFFromPrivateKey, getBalance,
+import { getAccountsFromWIFKey, generatePrivateKey, getWIFFromPrivateKey, getBalance, sendAssetTransaction,
   getTransactionHistory, getMarketPriceUSD, getClaimAmounts, getWalletDBHeight } from 'neon-js/lib/neon-web';
 
 export default {
@@ -55,29 +55,8 @@ export default {
       });
   },
 
-  getMarketPriceUSD(neo) {
-    return getMarketPriceUSD(neo);
-  },
-
-  getClaimAmounts(network, address) {
-    return getClaimAmounts(network, address);
-  },
-
-  getBlockHeight(network) {
-    return getWalletDBHeight(network);
-  }
+  getMarketPriceUSD,
+  getClaimAmounts,
+  getWalletDBHeight,
+  sendAssetTransaction,
 }
-
-  // syncTransactionHistory(dispatch, net, address);
-  // syncAvailableClaim(dispatch, net, address);
-  // syncBlockHeight(dispatch, net);
-  // return getBalance(net, address).then((resultBalance) => {
-  //   return getMarketPriceUSD(resultBalance.Neo).then((resultPrice) => {
-  //     if (resultPrice === undefined || resultPrice === null){
-  //       dispatch(setBalance(resultBalance.Neo, resultBalance.Gas, '--'));
-  //     } else {
-  //       dispatch(setBalance(resultBalance.Neo, resultBalance.Gas, resultPrice));
-  //     }
-  //     return true;
-  //   })
-  // })

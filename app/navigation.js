@@ -5,6 +5,7 @@ import { TabNavigator, StackNavigator, DrawerNavigator } from 'react-navigation'
 import LoginScreen from './modules/login-screen';
 import HomeScreen from './modules/home-screen';
 import PublicAddressScreen from './modules/public-address-screen';
+import SendScreen from './modules/send-screen';
 import TransactionsScreen from './modules/transactions-screen';
 import styles, { colors } from './styles';
 import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
@@ -12,6 +13,7 @@ import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
 const HomeStack = StackNavigator({
   Home: { screen: HomeScreen },
   PublicAddress: { screen: PublicAddressScreen },
+  Send: { screen: SendScreen },
 });
 
 const TransactionsStack = StackNavigator({

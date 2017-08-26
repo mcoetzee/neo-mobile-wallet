@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, ScrollView, StatusBar, RefreshControl, StyleSheet } from 'react-native';
+import { View, StatusBar } from 'react-native';
+import Screen from '../../components/screen';
 import Text from '../../components/text';
 import Button from '../../components/button';
 import Row from '../../components/row';
@@ -11,13 +12,31 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Title from './Title';
 import Toast from 'react-native-root-toast';
 import Markets from './Markets';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export class HomeScreen extends Component {
-  static navigationOptions = {
-    headerStyle: styles.screenHeader,
-    headerTitle: (
-      <Title />
-    )
+  static navigationOptions = ({ navigation}) => {
+    return {
+      headerStyle: styles.screenHeader,
+      headerTitle: (
+        <Title />
+      ),
+      headerRight: (
+        <Button
+          type="primary"
+          onPress={() => navigation.navigate('Send')}
+          icon={(
+            <Icon
+              name="send"
+              size={18}
+              color={colors.primaryGreen}
+            />
+          )}
+        >
+          Send
+        </Button>
+      )
+    }
   }
 
   constructor(props) {
@@ -74,15 +93,11 @@ export class HomeScreen extends Component {
   render() {
     const { balance, claim, markets } = this.props;
     return (
-      <ScrollView style={styles.screenContainer}
-        refreshControl={
-          <RefreshControl
-            refreshing={this.state.loading}
-            onRefresh={this.handleLoad}
-          />
-        }
+      <Screen
+        refreshing={this.state.loading}
+        onRefresh={this.handleLoad}
+        style={{ paddingTop: 64 }}
       >
-        <Spinner visible={false} overlayColor="rgba(14, 18, 22, 0.89)"/>
         <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
           <View style={{ width: 150 }}>
             <Text type="primary" style={screenStyles.symbol}>NEO</Text>
@@ -100,7 +115,7 @@ export class HomeScreen extends Component {
           </Text>
         </View>
 
-        <View style={{ paddingTop: 20 }}>
+        <View style={{ paddingTop: 20, flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
           <Button type="primary" disabled={!claim.amount}>Claim {claim.amount} GAS</Button>
         </View>
 
@@ -116,7 +131,7 @@ export class HomeScreen extends Component {
         <View style={{ flex: 1, flexDirection: 'row', marginTop: 20 }}>
           <Markets neo={markets.neo} gas={markets.gas} />
         </View>
-      </ScrollView>
+      </Screen>
     );
   }
 }

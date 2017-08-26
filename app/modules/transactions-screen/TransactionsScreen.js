@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Linking, StyleSheet, View, ScrollView, RefreshControl, TouchableHighlight } from 'react-native';
+import { Linking, StyleSheet, View, TouchableHighlight } from 'react-native';
 import styles, { colors } from '../../styles';
 import Text from '../../components/text';
+import Screen from '../../components/screen';
 import Button, { InlineButton } from '../../components/button';
 import { connect } from 'react-redux';
 import * as actions from './action-creators';
@@ -48,13 +49,10 @@ export class TransactionsScreen extends Component {
   render() {
     const { transactions } = this.props;
     return (
-      <ScrollView style={styles.screenContainer}
-        refreshControl={
-          <RefreshControl
-            refreshing={!!transactions.loading}
-            onRefresh={this.handleLoad}
-          />
-        }
+      <Screen
+        refreshing={!!transactions.loading}
+        onRefresh={this.handleLoad}
+        style={{ paddingTop: 24 }}
       >
         {transactions.data.map(tx => {
           return (
@@ -69,7 +67,7 @@ export class TransactionsScreen extends Component {
             </TouchableHighlight>
           );
         })}
-      </ScrollView>
+      </Screen>
     );
   }
 }

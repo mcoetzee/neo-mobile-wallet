@@ -6,10 +6,7 @@ import { colors } from '../../styles';
 export default function Button(props) {
   const style = styles[props.type] || styles.default;
   return (
-    <TouchableOpacity
-      onPress={props.onPress}
-      style={style.button}
-    >
+    <TouchableOpacity onPress={props.onPress} style={style.button}>
       <Text style={[style.text, { paddingVertical: 0 }]}>
         {props.children}
       </Text>

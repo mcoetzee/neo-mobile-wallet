@@ -45,3 +45,12 @@ export function loadTransactionHistory(network, address) {
       .catch(err => dispatch({ type: c.LOAD_TRANSACTION_HISTORY_RESPONSE, error: true, payload: err }));
   };
 }
+
+export function sendAsset(network, toAddress, fromWif, asset, amount) {
+  return dispatch => {
+    dispatch({ type: c.SEND_ASSET, payload: { network, toAddress, fromWif, asset, amount }});
+    return WalletService.sendAssetTransaction(network, toAddress, fromWif, asset, amount)
+      .then(response => dispatch({ type: c.SEND_ASSET_RESPONSE, payload: response }))
+      .catch(err => dispatch({ type: c.SEND_ASSET_RESPONSE, error: true, payload: err }));
+  };
+}

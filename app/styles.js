@@ -2,6 +2,7 @@ import { StyleSheet, Dimensions, Platform } from 'react-native';
 
 export const colors = {
   primaryGreen: '#8fd700',
+  orange: '#ff7500',
   black: '#0e1216',
   white: '#fff',
   grey: 'rgb(136, 136, 136)',
@@ -13,14 +14,13 @@ export const colors = {
 };
 
 export default StyleSheet.create({
-  screenContainer: {
-    flex: 1,
-    paddingTop: 64,
-    paddingLeft: 10,
-    paddingRight: 10,
+  screenHeader: {
     backgroundColor: colors.black
   },
-  screenHeader: {
+  screenContainer: {
+    flex: 1,
+    paddingLeft: 10,
+    paddingRight: 10,
     backgroundColor: colors.black
   },
   transparentScreenHeader: {
