@@ -3,7 +3,8 @@ import { View, ScrollView, TouchableOpacity } from 'react-native';
 import styles, { colors } from '../../styles';
 import TextInput from '../../components/text-input';
 import Text from '../../components/text';
-import Button, { BackButton, InlineButton } from '../../components/button';
+import Screen from '../../components/screen';
+import { BackButton } from '../../components/button';
 import { connect } from 'react-redux';
 import QRCode from 'react-native-qrcode';
 
@@ -22,7 +23,7 @@ export class PublicAddressScreen extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.screenContainer}>
+      <Screen style={{ paddingTop: 40 }}>
         <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
           <View>
             <Text>{this.props.address.public}</Text>
@@ -36,7 +37,7 @@ export class PublicAddressScreen extends Component {
             />
           </View>
         </View>
-      </ScrollView>
+      </Screen>
     );
   }
 }

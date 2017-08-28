@@ -9,16 +9,17 @@ Row.propTypes = {
   onPress: PropTypes.func,
 };
 
-export default function Row({ children, onPress }) {
+export default function Row({ style, children, onPress }) {
   const iconName = Platform.OS === 'ios' ? 'ios-arrow-forward' : 'md-arrow-forward';
+  const rowStyle = style ? [styles.row, style] : styles.row;
   return (
     <TouchableHighlight
       onPress={onPress}
       underlayColor={colors.quarterGrey}
     >
-      <View style={styles.row}>
+      <View style={rowStyle}>
         {children}
-        <View style={styles.chevronContainer}>
+        <View style={styles.chevronContainer, { width: 40 }}>
           <Icon
             name={iconName}
             size={CHEVRON_SIZE}

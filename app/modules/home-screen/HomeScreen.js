@@ -14,6 +14,8 @@ import Toast from 'react-native-root-toast';
 import Markets from './Markets';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import QRCode from 'react-native-qrcode';
+import * as Animatable from 'react-native-animatable';
 
 export class HomeScreen extends Component {
   static navigationOptions = ({ navigation}) => {
@@ -94,7 +96,7 @@ export class HomeScreen extends Component {
   }
 
   render() {
-    const { balance, claim, markets } = this.props;
+    const { balance, address, claim, markets } = this.props;
     return (
       <Screen
         refreshing={this.state.loading}
@@ -123,10 +125,20 @@ export class HomeScreen extends Component {
         </View>
 
         <View style={{ paddingTop: 20 }}>
-          <Row onPress={() => this.props.navigation.navigate('PublicAddress')}>
-            <View>
-              <Text>Your Public Neo Address:</Text>
-              <Text type="secondary">{this.props.address.public}</Text>
+          <Row style={{ paddingLeft: 0 }} onPress={() => this.props.navigation.navigate('PublicAddress')}>
+            <View style={{ flex: 1, flexDirection: 'row' }}>
+              <Animatable.View animation="fadeIn">
+                <QRCode
+                  value={address.public}
+                  size={32}
+                  bgColor={colors.halfGrey}
+                  fgColor={colors.black}
+                />
+              </Animatable.View>
+              <View style={{ paddingLeft: 8 }}>
+                <Text>Your Public Neo Address:</Text>
+                <Text type="secondary">{address.public}</Text>
+              </View>
             </View>
           </Row>
         </View>
