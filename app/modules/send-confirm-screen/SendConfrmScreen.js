@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
-import { KeyboardAvoidingView, View } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView, View } from 'react-native';
 import styles, { colors } from '../../styles';
 import Text from '../../components/text';
+import { BackButton } from '../../components/button';
 import * as Keychain from 'react-native-keychain';
 import PinCode from '../../components/pin-code';
 import * as actions from './action-creators';
 import { connect } from 'react-redux';
 
 export class SendConfrmScreen extends Component {
-  static navigationOptions = {
-    title: 'Confirm',
-    headerStyle: styles.screenHeader,
-    headerTitleStyle: { color: 'white' }
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: 'Confirm',
+      headerStyle: styles.screenHeader,
+      headerTitleStyle: { color: colors.white },
+      headerLeft: (
+        <BackButton navigation={navigation} />
+      )
+    };
   }
 
   constructor(props) {
@@ -35,11 +41,19 @@ export class SendConfrmScreen extends Component {
     const { message } = this.state;
     return (
       <KeyboardAvoidingView style={styles.screenContainer}>
-        <View style={{ marginTop: 20, marginBottom: 20 }}>
-          <Text>Address</Text>
+        <View style={
+          {
+            marginTop: 20,
+            marginBottom: 20,
+            padding: 10,
+            borderColor: colors.primaryGreen,
+            borderWidth: StyleSheet.hairlineWidth,
+          }
+        }>
+          <Text type="secondary">Public Address</Text>
           <Text>{params.address}</Text>
-          <Text>Amount</Text>
-          <Text>{params.asset.toUpperCase()} {params.amount}</Text>
+          <Text type="secondary" style={{ marginTop: 10 }}>Amount</Text>
+          <Text>{params.amount} {params.asset.toUpperCase()}</Text>
         </View>
         <PinCode
           label="Enter your pin to confirm"

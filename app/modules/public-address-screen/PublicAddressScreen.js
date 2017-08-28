@@ -1,17 +1,23 @@
 import React, { Component } from 'react';
 import { View, ScrollView, TouchableOpacity } from 'react-native';
-import styles from '../../styles';
+import styles, { colors } from '../../styles';
 import TextInput from '../../components/text-input';
 import Text from '../../components/text';
-import Button, { InlineButton } from '../../components/button';
+import Button, { BackButton, InlineButton } from '../../components/button';
 import { connect } from 'react-redux';
 import QRCode from 'react-native-qrcode';
 
 export class PublicAddressScreen extends Component {
-  static navigationOptions = {
-    headerTitle: 'Public Address',
-    headerStyle: styles.screenHeader,
-    headerTitleStyle: { color: 'white' },
+  static navigationOptions = ({ navigation }) => {
+    const { dispatch } = navigation;
+    return {
+      headerTitle: 'Public Address',
+      headerStyle: styles.screenHeader,
+      headerTitleStyle: { color: colors.white },
+      headerLeft: (
+        <BackButton navigation={navigation} />
+      ),
+    };
   }
 
   render() {
@@ -25,8 +31,8 @@ export class PublicAddressScreen extends Component {
             <QRCode
               value={this.props.address.public}
               size={250}
-              bgColor='white'
-              fgColor='black'
+              bgColor={colors.white}
+              fgColor={colors.black}
             />
           </View>
         </View>

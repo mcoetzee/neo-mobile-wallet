@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StatusBar } from 'react-native';
+import { View, StatusBar, TouchableOpacity } from 'react-native';
 import Screen from '../../components/screen';
 import Text from '../../components/text';
 import Button from '../../components/button';
@@ -13,29 +13,32 @@ import Title from './Title';
 import Toast from 'react-native-root-toast';
 import Markets from './Markets';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 
 export class HomeScreen extends Component {
   static navigationOptions = ({ navigation}) => {
     return {
+      gesturesEnabled: false,
       headerStyle: styles.screenHeader,
       headerTitle: (
         <Title />
       ),
+      headerLeft: (
+        <TouchableOpacity onPress={() => {}} style={{ marginLeft: 10 }}>
+          <IonIcon color={colors.white} name="md-menu" size={22} />
+        </TouchableOpacity>
+      ),
       headerRight: (
-        <Button
-          type="primary"
+        <Icon.Button
           onPress={() => navigation.navigate('Send')}
-          icon={(
-            <Icon
-              name="send"
-              size={18}
-              color={colors.primaryGreen}
-            />
-          )}
+          color={colors.primaryGreen}
+          name="send"
+          size={18}
+          backgroundColor="transparent"
         >
           Send
-        </Button>
-      )
+        </Icon.Button>
+      ),
     }
   }
 

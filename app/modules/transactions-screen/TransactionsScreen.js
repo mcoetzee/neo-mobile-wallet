@@ -11,6 +11,7 @@ import Title from './Title';
 
 export class TransactionsScreen extends Component {
   static navigationOptions = {
+    gesturesEnabled: false,
     headerStyle: styles.screenHeader,
     headerTitle: (
       <Title />

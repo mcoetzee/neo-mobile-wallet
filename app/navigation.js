@@ -16,9 +16,26 @@ import LineIcon from 'react-native-vector-icons/SimpleLineIcons';
 const HomeStack = StackNavigator({
   Home: { screen: HomeScreen },
   PublicAddress: { screen: PublicAddressScreen },
+});
+
+const SendStack = StackNavigator({
   Send: { screen: SendScreen },
   SendConfrm: { screen: SendScreenScreen },
 });
+
+const HomeModalStack = StackNavigator(
+  {
+    Home: {
+      screen: HomeStack,
+      navigationOptions: { header: null }
+    },
+    Send: {
+      screen: SendStack,
+      navigationOptions: { header: null }
+    },
+  },
+  { mode: 'modal' }
+);
 
 const TransactionsStack = StackNavigator({
   TransactionsStack: { screen: TransactionsScreen },
@@ -31,7 +48,7 @@ const PinCodeSetupStack = StackNavigator({
 
 const HomeTabs = TabNavigator({
   Home: {
-    screen: HomeStack,
+    screen: HomeModalStack,
     navigationOptions: {
       tabBarIcon: ({ tintColor }) => (
         <LineIcon
@@ -45,7 +62,6 @@ const HomeTabs = TabNavigator({
   Transactions: { screen: TransactionsStack },
 }, {
   animationEnabled: false,
-  swipeEnabled: true,
   tabBarOptions: {
     activeTintColor: 'white',
     activeBackgroundColor: colors.quarterGrey,
@@ -64,7 +80,7 @@ export const Main = StackNavigator({
   },
   Home: {
     screen: HomeTabs,
-    navigationOptions: { header: null }
+    navigationOptions: { header: null, gesturesEnabled: false }
   }
 });
 

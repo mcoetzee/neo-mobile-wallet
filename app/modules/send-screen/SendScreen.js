@@ -6,16 +6,43 @@ import Toast from 'react-native-root-toast';
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import styles, { colors } from '../../styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 import TextInput from '../../components/text-input';
 import Text from '../../components/text';
 import Button, { InlineButton } from '../../components/button';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 class SendScreen extends Component {
-  static navigationOptions = {
-    title: 'Send',
-    headerStyle: styles.screenHeader,
-    headerTitleStyle: { color: 'white' }
+  static navigationOptions = ({ navigation }) => {
+    const { state, dispatch } = navigation;
+    return {
+      title: 'Send',
+      headerStyle: styles.screenHeader,
+      headerTitleStyle: { color: colors.white },
+      headerLeft: (
+        <TouchableOpacity
+          onPress={() => dispatch(NavigationActions.back())}
+          style={{ marginLeft: 12 }}
+        >
+          <IonIcon color={colors.white} name="md-close" size={24} />
+        </TouchableOpacity>
+      ),
+      headerRight: (
+        <View style={{ marginRight: 10 }}>
+          <IonIcon.Button
+            onPress={() => state.params.handleSubmit()}
+            color={colors.black}
+            name="md-checkmark"
+            size={22}
+            backgroundColor={colors.primaryGreen}
+            style={{ paddingVertical: 4, borderRadius: 2 }}
+          >
+            Done
+          </IonIcon.Button>
+        </View>
+      ),
+    }
   }
 
   constructor(props) {
@@ -25,6 +52,10 @@ class SendScreen extends Component {
       { title: 'GAS', value: 'Gas' },
     ];
     this.state = { asset: 'Neo', address: '', amount: '', message: '' };
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({ handleSubmit: this.handleSubmit });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -142,29 +173,6 @@ class SendScreen extends Component {
             <Text style={{ color: colors.orange, marginTop: 0 }}>{amountMessage}</Text>
           </View>
         }
-
-        <View style={{
-          flex: 1,
-          flexDirection: 'row',
-          marginTop: 20,
-        }}>
-          <Button
-            type="primary"
-            onPress={this.handleSubmit}
-            icon={
-              <Icon
-                name="send"
-                size={18}
-                color={colors.primaryGreen}
-                style={{ alignSelf: 'center', paddingLeft: 6, paddingTop: 4 }}
-              />
-            }
-            style={{ marginRight: 10 }}
-          >
-            Send
-          </Button>
-        </View>
-
       </KeyboardAwareScrollView>
     );
   }

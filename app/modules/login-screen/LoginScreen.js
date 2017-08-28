@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { View, ScrollView, TouchableOpacity } from 'react-native';
-import styles from '../../styles';
+import { View, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import styles, { colors } from '../../styles';
 import TextInput from '../../components/text-input';
 import Text from '../../components/text';
+import Screen from '../../components/screen';
 import Button, { InlineButton } from '../../components/button';
 import * as actions from './action-creators';
 import { connect } from 'react-redux';
 import * as Keychain from 'react-native-keychain';
+import { NavigationActions } from 'react-navigation';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 class LoginScreen extends Component {
   static navigationOptions = {
@@ -31,15 +33,17 @@ class LoginScreen extends Component {
       .then(response => {
         if (response.payload && response.payload.public) {
           // Success
-          this.setState({ wif: '', message: '' });
+          this.setState({ wif: '' });
 
           Keychain.getGenericPassword()
-            .then((credentials) => {
-              if (credentials) {
-                this.props.navigation.navigate('Home');
-              } else {
-                this.props.navigation.navigate('PinCodeSetup');
-              }
+            .then(credentials => {
+              const resetAction = NavigationActions.reset({
+                index: 0,
+                actions: [
+                  NavigationActions.navigate({ routeName: credentials ? 'Home' : 'PinCodeSetup' })
+                ]
+              })
+              this.props.navigation.dispatch(resetAction)
             }).catch((error) => {
               console.log('Keychain couldn\'t be accessed! Maybe no value set?', error);
             });
@@ -50,11 +54,12 @@ class LoginScreen extends Component {
   };
 
   render() {
+    const { message } = this.state;
     return (
-      <KeyboardAwareScrollView style={styles.screenContainer}>
-        {!!this.state.message &&
-          <View style={{ marginTop: 20 }}>
-            <Text>{this.state.message}</Text>
+      <Screen style={{ paddingTop: 40 }}>
+        {!!message &&
+          <View style={{ marginBottom: 20, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.orange, padding: 7 }}>
+            <Text style={{ color: colors.orange }}>{message}</Text>
           </View>
         }
         <Text>Log in to your wallet</Text>
@@ -68,11 +73,20 @@ class LoginScreen extends Component {
         <View style={{
           flex: 1,
           flexDirection: 'row',
-          marginTop: 10,
+          marginTop: 15,
         }}>
-          <Button type="primary" onPress={this.handleSubmit}>
-            Log in
-          </Button>
+          <View style={{ borderColor: colors.primaryGreen, borderWidth: StyleSheet.hairlineWidth }}>
+            <Icon.Button
+              onPress={this.handleSubmit}
+              color={colors.primaryGreen}
+              name="md-log-in"
+              size={22}
+              backgroundColor={colors.black}
+              style={{ paddingVertical: 4 }}
+            >
+              Log in
+            </Icon.Button>
+          </View>
         </View>
         <View style={{
           flex: 1,
@@ -84,7 +98,17 @@ class LoginScreen extends Component {
             New Wallet
           </InlineButton>
         </View>
-      </KeyboardAwareScrollView>
+        <View style={{
+          flex: 1,
+          flexDirection: 'row',
+          marginTop: 40,
+        }}>
+          <Text>Development</Text>
+          <InlineButton onPress={() => Keychain.resetGenericPassword()}>
+            Reset Pin
+          </InlineButton>
+        </View>
+      </Screen>
     );
   }
 }
