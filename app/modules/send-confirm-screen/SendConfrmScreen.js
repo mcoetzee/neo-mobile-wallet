@@ -30,7 +30,7 @@ export class SendConfrmScreen extends Component {
       .then(creds => this.setState({ pin: creds.password }));
   }
 
-  handleSubmit = (pinCofirm) => {
+  handleSubmit = () => {
     const { params } = this.props.navigation.state;
     this.props.sendAsset(this.props.network, params.address, this.props.address.wif, params.asset, params.amount);
     this.props.navigation.goBack();

@@ -29,20 +29,6 @@ class SendScreen extends Component {
           <IonIcon color={colors.white} name="md-close" size={24} />
         </TouchableOpacity>
       ),
-      headerRight: (
-        <View style={{ marginRight: 10 }}>
-          <IonIcon.Button
-            onPress={() => state.params.handleSubmit()}
-            color={colors.black}
-            name="md-checkmark"
-            size={22}
-            backgroundColor={colors.primaryGreen}
-            style={{ paddingVertical: 4, borderRadius: 2 }}
-          >
-            Done
-          </IonIcon.Button>
-        </View>
-      ),
     }
   }
 
@@ -76,16 +62,18 @@ class SendScreen extends Component {
     if (response.error) {
       this.setState({ failureMessage: response.error.message || 'Something went wrong processing this transaction' });
     } else {
-      Toast.show('Transaction complete! Your balance will update when the blockchain has processed it', {
-        duration: 6000,
-        position: Toast.positions.BOTTOM,
-        shadow: false,
-        animation: true,
-        hideOnPress: true,
-        backgroundColor: colors.primaryGreen,
-        textColor: colors.black
-      });
-       this.props.navigation.dispatch(NavigationActions.back());
+      this.props.navigation.dispatch(NavigationActions.back());
+      setTimeout(() => {
+        Toast.show('Transaction complete! Your balance will update when the blockchain has processed it', {
+          duration: 6000,
+          position: Toast.positions.BOTTOM,
+          shadow: false,
+          animation: true,
+          hideOnPress: true,
+          backgroundColor: colors.primaryGreen,
+          textColor: colors.black
+        });
+      }, 500);
     }
   }
 
@@ -125,6 +113,7 @@ class SendScreen extends Component {
           value={address}
           onChangeText={text => this.handleChange({ address: text.trim() })}
           returnKeyType="done"
+          onSubmitEditing={() => this.amountInput.focus()}
         />
         {showMessages && !!messages.address &&
           <Animatable.View animation="fadeIn">
@@ -168,17 +157,29 @@ class SendScreen extends Component {
         </View>
 
         <TextInput
+          ref={input => { this.amountInput = input; }}
           placeholder="Enter the amount to send"
           value={this.state.amount}
-          keyboardType="numeric"
           onChangeText={text => this.handleChange({ amount: text.trim() })}
-          returnKeyType="done"
+          keyboardType="numeric"
         />
         {showMessages && !!messages.amount &&
           <Animatable.View animation="fadeIn">
             <Text style={{ color: colors.orange, marginTop: 0 }}>{messages.amount}</Text>
           </Animatable.View>
         }
+        <View style={{ marginTop: 20, borderColor: colors.primaryGreen, borderWidth: StyleSheet.hairlineWidth }}>
+          <IonIcon.Button
+            onPress={this.handleSubmit}
+            color={colors.primaryGreen}
+            name="md-checkmark"
+            size={22}
+            backgroundColor={colors.black}
+            style={{ paddingVertical: 4, borderRadius: 2 }}
+          >
+            Done
+          </IonIcon.Button>
+        </View>
       </KeyboardAwareScrollView>
     );
   }
