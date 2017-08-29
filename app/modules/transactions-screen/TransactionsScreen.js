@@ -62,7 +62,7 @@ export class TransactionsScreen extends Component {
               underlayColor={colors.quarterGrey}
             >
               <View style={{ paddingTop: 10, paddingBottom: 10, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: colors.halfGrey }}>
-                <Text>{tx.type} {tx.amount}</Text>
+                <Text>{tx.amount} {tx.type}</Text>
                 <Text type="secondary">{tx.txid}</Text>
               </View>
             </TouchableHighlight>

@@ -9,7 +9,7 @@ import * as actions from './action-creators';
 import { connect } from 'react-redux';
 import * as Keychain from 'react-native-keychain';
 import { NavigationActions } from 'react-navigation';
-import Icon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/Entypo';
 
 class LoginScreen extends Component {
   static navigationOptions = {
@@ -71,15 +71,13 @@ class LoginScreen extends Component {
           onSubmitEditing={this.handleSubmit}
         />
         <View style={{
-          flex: 1,
-          flexDirection: 'row',
           marginTop: 15,
         }}>
           <View style={{ borderColor: colors.primaryGreen, borderWidth: StyleSheet.hairlineWidth }}>
             <Icon.Button
               onPress={this.handleSubmit}
               color={colors.primaryGreen}
-              name="md-log-in"
+              name="wallet"
               size={22}
               backgroundColor={colors.black}
               style={{ paddingVertical: 4 }}
@@ -98,19 +96,20 @@ class LoginScreen extends Component {
             New Wallet
           </InlineButton>
         </View>
-        <View style={{
-          flex: 1,
-          flexDirection: 'row',
-          marginTop: 40,
-        }}>
-          <Text>Development</Text>
-          <InlineButton onPress={() => Keychain.resetGenericPassword()}>
-            Reset Pin
-          </InlineButton>
-        </View>
       </Screen>
     );
   }
 }
 
 export default connect(null, actions)(LoginScreen);
+
+// <View style={{
+//   flex: 1,
+//   flexDirection: 'row',
+//   marginTop: 40,
+// }}>
+//   <Text>Development</Text>
+//   <InlineButton onPress={() => Keychain.resetGenericPassword()}>
+//     Reset Pin
+//   </InlineButton>
+// </View>
