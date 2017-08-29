@@ -4,6 +4,7 @@ import Text from '../text';
 import PinCodeControl from './PinCodeControl';
 import { colors } from '../../styles';
 import styles from './styles';
+import * as Animatable from 'react-native-animatable';
 
 export default class PinCode extends Component {
   static defaultProps = { pinLength: 4 }
@@ -19,7 +20,11 @@ export default class PinCode extends Component {
     }
 
     this.setState({ value }, () => {
-      if (!this.isComplete() || this.isIncorrect()) {
+      if (!this.isComplete()) {
+        return;
+      }
+      if (this.isIncorrect()) {
+        this.pinContainer.shake(800);
         return;
       }
       this.props.onComplete(this.state.value);
@@ -44,7 +49,9 @@ export default class PinCode extends Component {
         <View style={styles.pinView}>
           {!!label && <Text>{label}</Text>}
           <TouchableOpacity onPress={() => this.pinInput.focus()}>
-            <PinCodeControl pin={value} pinLength={pinLength} />
+            <Animatable.View ref={view => { this.pinContainer = view; } }>
+              <PinCodeControl pin={value} pinLength={pinLength} />
+            </Animatable.View>
           </TouchableOpacity>
           {error && <Text style={{ color: colors.orange }}>This pin is incorrect</Text>}
           {!error && <Text style={{ color: colors.grey }}>{value.charAt(value.length - 1)}</Text>}
