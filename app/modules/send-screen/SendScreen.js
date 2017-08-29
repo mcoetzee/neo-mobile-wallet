@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ValidationService from '../../services/ValidationService';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Toast from 'react-native-root-toast';
@@ -12,6 +11,8 @@ import Text from '../../components/text';
 import Button, { InlineButton } from '../../components/button';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
+import * as Animatable from 'react-native-animatable';
+import validate from './validation';
 
 class SendScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -51,7 +52,16 @@ class SendScreen extends Component {
       { title: 'NEO', value: 'Neo' },
       { title: 'GAS', value: 'Gas' },
     ];
-    this.state = { asset: 'Neo', address: '', amount: '', message: '' };
+    this.state = validate(
+      {
+        address: '',
+        asset: 'Neo',
+        amount: '',
+        messages: {},
+        failureMessage: ''
+      },
+      props.balance
+    );
   }
 
   componentDidMount() {
@@ -64,7 +74,7 @@ class SendScreen extends Component {
       return;
     }
     if (response.error) {
-      this.setState({ message: response.error.message || 'Something went wrong processing this transaction' });
+      this.setState({ failureMessage: response.error.message || 'Something went wrong processing this transaction' });
     } else {
       Toast.show('Transaction complete! Your balance will update when the blockchain has processed it', {
         duration: 6000,
@@ -75,38 +85,34 @@ class SendScreen extends Component {
         backgroundColor: colors.primaryGreen,
         textColor: colors.black
       });
-      this.props.navigation.goBack();
+       this.props.navigation.dispatch(NavigationActions.back());
     }
   }
 
-  handleAddressChange = address => this.setState({ address })
-  handleAmountChange = amount => this.setState({ amount })
-  handleAssetChange = asset => this.setState({ asset })
+  handleChange = update => {
+    this.setState(state => {
+      return validate({ ...state, ...update }, this.props.balance)
+    });
+  }
 
   handleSubmit = () => {
-    const { asset } = this.state;
-    const address = this.state.address.trim();
-    const amount = this.state.amount.trim();
-
-    const addressMessage = ValidationService.validateAddress(address);
-    const amountMessage = ValidationService.validateAmountToSend(asset, amount, this.props.balance);
-
-    this.setState({ addressMessage, amountMessage });
-    if (addressMessage || amountMessage) {
-      return;
+    const { address, asset, amount, valid } = this.state;
+    if (valid) {
+      this.props.navigation.navigate('SendConfrm', { address, asset, amount });
+    } else {
+      this.setState({ showMessages: true });
     }
-
-    this.props.navigation.navigate('SendConfrm', { address, asset, amount });
   }
 
   render() {
-    const { address, asset, amount, addressMessage, amountMessage, message } = this.state;
+    const { address, asset, amount, showMessages, messages, failureMessage } = this.state;
+
     return (
       <KeyboardAwareScrollView style={styles.screenContainer}>
         <Spinner visible={this.props.sending} overlayColor="rgba(14, 18, 22, 0.89)"/>
-        {!!message &&
+        {!!failureMessage &&
           <View style={{ borderWidth: StyleSheet.hairlineWidth, borderColor: colors.orange, padding: 7 }}>
-            <Text style={{ color: colors.orange }}>Transaction failed. {message}</Text>
+            <Text style={{ color: colors.orange }}>Transaction failed. {failureMessage}</Text>
           </View>
         }
 
@@ -117,13 +123,13 @@ class SendScreen extends Component {
         <TextInput
           placeholder="Enter the address to send to"
           value={address}
-          onChangeText={this.handleAddressChange}
+          onChangeText={text => this.handleChange({ address: text.trim() })}
           returnKeyType="done"
         />
-        {!!addressMessage &&
-          <View>
-            <Text style={{ color: colors.orange, marginTop: 0 }}>{addressMessage}</Text>
-          </View>
+        {showMessages && !!messages.address &&
+          <Animatable.View animation="fadeIn">
+            <Text style={{ color: colors.orange, marginTop: 0 }}>{messages.address}</Text>
+          </Animatable.View>
         }
 
         <View style={{ marginTop: 20 }}>
@@ -141,7 +147,7 @@ class SendScreen extends Component {
           }
         }>
           <InlineButton
-            onPress={() => this.handleAssetChange('Neo')}
+            onPress={() => this.handleChange({ asset: 'Neo' })}
           >
             <Text style={asset === 'Neo' ? selectedAssetStyle : assetStyle}>
               NEO
@@ -149,7 +155,7 @@ class SendScreen extends Component {
           </InlineButton>
           <Text style={{ color: colors.halfGrey }}>/</Text>
           <InlineButton
-            onPress={() => this.handleAssetChange('Gas')}
+            onPress={() => this.handleChange({ asset: 'Gas' })}
           >
             <Text style={asset === 'Gas' ? selectedAssetStyle : assetStyle}>
               GAS
@@ -165,13 +171,13 @@ class SendScreen extends Component {
           placeholder="Enter the amount to send"
           value={this.state.amount}
           keyboardType="numeric"
-          onChangeText={this.handleAmountChange}
+          onChangeText={text => this.handleChange({ amount: text.trim() })}
           returnKeyType="done"
         />
-        {!!amountMessage &&
-          <View>
-            <Text style={{ color: colors.orange, marginTop: 0 }}>{amountMessage}</Text>
-          </View>
+        {showMessages && !!messages.amount &&
+          <Animatable.View animation="fadeIn">
+            <Text style={{ color: colors.orange, marginTop: 0 }}>{messages.amount}</Text>
+          </Animatable.View>
         }
       </KeyboardAwareScrollView>
     );
