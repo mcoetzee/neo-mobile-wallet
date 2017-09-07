@@ -1,28 +1,36 @@
 import React, { Component } from 'react';
-import { Linking, StyleSheet, View, TouchableHighlight } from 'react-native';
+import { Linking, StyleSheet, View, TouchableOpacity, TouchableHighlight } from 'react-native';
 import styles, { colors } from '../../styles';
 import Text from '../../components/text';
 import Screen from '../../components/screen';
 import Button, { InlineButton } from '../../components/button';
 import { connect } from 'react-redux';
 import * as actions from './action-creators';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 import EntypoIcon from 'react-native-vector-icons/Entypo';
 import Title from './Title';
 
 export class TransactionsScreen extends Component {
-  static navigationOptions = {
-    gesturesEnabled: false,
-    headerStyle: styles.screenHeader,
-    headerTitle: (
-      <Title />
-    ),
-    tabBarIcon: ({ tintColor }) => (
-      <EntypoIcon
-        name="list"
-        size={25}
-        color={tintColor}
-      />
-    ),
+  static navigationOptions = ({ navigation }) => {
+    return {
+      gesturesEnabled: false,
+      headerStyle: styles.screenHeader,
+      headerTitle: (
+        <Title />
+      ),
+      headerLeft: (
+        <TouchableOpacity onPress={() => navigation.navigate('DrawerOpen')} style={{ marginLeft: 10 }}>
+          <IonIcon color={colors.white} name="md-menu" size={22} />
+        </TouchableOpacity>
+      ),
+      tabBarIcon: ({ tintColor }) => (
+        <EntypoIcon
+          name="list"
+          size={25}
+          color={tintColor}
+        />
+      ),
+    };
   }
 
   constructor(props) {

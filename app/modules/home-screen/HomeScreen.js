@@ -26,13 +26,13 @@ export class HomeScreen extends Component {
         <Title />
       ),
       headerLeft: (
-        <TouchableOpacity onPress={() => {}} style={{ marginLeft: 10 }}>
+        <TouchableOpacity onPress={() => navigation.navigate('DrawerOpen')} style={{ marginLeft: 10 }}>
           <IonIcon color={colors.white} name="md-menu" size={22} />
         </TouchableOpacity>
       ),
       headerRight: (
         <Icon.Button
-          onPress={() => navigation.navigate('Send')}
+          onPress={() => navigation.navigate('SendStack')}
           color={colors.primaryGreen}
           name="send"
           size={18}

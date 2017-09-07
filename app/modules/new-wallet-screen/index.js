@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, ScrollView, TextInput } from 'react-native';
 import Text from '../../components/text';
+import Screen from '../../components/screen';
 import styles from '../../styles';
 
 export default class NewWalletScreen extends Component {
@@ -12,9 +13,9 @@ export default class NewWalletScreen extends Component {
 
   render() {
     return (
-      <View style={styles.screenContainer}>
+      <Screen>
         <Text>New Wallet Screen</Text>
-      </View>
+      </Screen>
     );
   }
 }

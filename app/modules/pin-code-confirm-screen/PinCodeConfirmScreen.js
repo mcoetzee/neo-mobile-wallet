@@ -25,7 +25,7 @@ export default class PinCodeSetupScreen extends Component {
   handleSubmit = (pin) => {
     Keychain.setGenericPassword('@neo-p', pin)
       .then(() => {
-        this.props.navigation.navigate('Home');
+        this.props.navigation.navigate('HomeDrawer');
       }).catch((error) => {
         alert('Could not save ' + error);
       });

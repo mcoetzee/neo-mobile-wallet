@@ -40,7 +40,7 @@ class LoginScreen extends Component {
               const resetAction = NavigationActions.reset({
                 index: 0,
                 actions: [
-                  NavigationActions.navigate({ routeName: credentials ? 'Home' : 'PinCodeSetup' })
+                  NavigationActions.navigate({ routeName: credentials ? 'HomeDrawer' : 'PinCodeSetupStack' })
                 ]
               })
               this.props.navigation.dispatch(resetAction)
