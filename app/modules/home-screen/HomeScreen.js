@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StatusBar, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import Screen from '../../components/screen';
 import Text from '../../components/text';
 import Button from '../../components/button';
@@ -51,7 +51,6 @@ export class HomeScreen extends Component {
   }
 
   componentDidMount() {
-    StatusBar.setBarStyle('light-content');
     this.handleLoad();
   }
 
