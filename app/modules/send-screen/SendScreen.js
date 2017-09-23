@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import Spinner from 'react-native-loading-spinner-overlay';
-import Toast from 'react-native-root-toast';
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import styles, { colors } from '../../styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -50,30 +49,26 @@ class SendScreen extends Component {
     );
   }
 
-  componentDidMount() {
-    this.props.navigation.setParams({ handleSubmit: this.handleSubmit });
-  }
-
   componentWillReceiveProps(nextProps) {
     const { response } = nextProps;
     if (response === this.props.response) {
       return;
     }
-    if (response.error) {
-      this.setState({ failureMessage: response.error.message || 'Something went wrong processing this transaction' });
+    if (nextProps.error) {
+      if (response.error) {
+        this.setState({
+          failureMessage: 'Transaction failed. ' + (response.error.message || 'Something went wrong processing this transaction')
+        });
+      } else {
+        this.handleChange({
+          address: '',
+          amount: '',
+          failureMessage: 'It is unclear whether the transaction was successful or not. Please make sure ' +
+            'that the blockchain did not process the transaction before trying again'
+        });
+      }
     } else {
       this.props.navigation.dispatch(NavigationActions.back());
-      setTimeout(() => {
-        Toast.show('Transaction complete! Your balance will update when the blockchain has processed it', {
-          duration: 6000,
-          position: Toast.positions.BOTTOM,
-          shadow: false,
-          animation: true,
-          hideOnPress: true,
-          backgroundColor: colors.primaryGreen,
-          textColor: colors.black
-        });
-      }, 500);
     }
   }
 
@@ -86,7 +81,7 @@ class SendScreen extends Component {
   handleSubmit = () => {
     const { address, asset, amount, valid } = this.state;
     if (valid) {
-      this.props.navigation.navigate('SendConfrm', { address, asset, amount });
+      this.props.navigation.navigate('SendConfirm', { address, asset, amount });
     } else {
       this.setState({ showMessages: true });
     }
@@ -100,7 +95,7 @@ class SendScreen extends Component {
         <Spinner visible={this.props.sending} overlayColor="rgba(14, 18, 22, 0.89)"/>
         {!!failureMessage &&
           <View style={{ borderWidth: StyleSheet.hairlineWidth, borderColor: colors.orange, padding: 7 }}>
-            <Text style={{ color: colors.orange }}>Transaction failed. {failureMessage}</Text>
+            <Text style={{ color: colors.orange }}>{failureMessage}</Text>
           </View>
         }
 

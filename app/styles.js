@@ -2,6 +2,7 @@ import { StyleSheet, Dimensions, Platform } from 'react-native';
 
 export const colors = {
   primaryGreen: '#8fd700',
+  primaryFaded: 'rgba(143, 215, 0, 0.59)',
   orange: '#ff7500',
   black: '#0e1216',
   white: '#fff',

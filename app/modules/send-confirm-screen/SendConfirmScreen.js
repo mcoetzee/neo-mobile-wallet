@@ -8,7 +8,7 @@ import PinCode from '../../components/pin-code';
 import * as actions from './action-creators';
 import { connect } from 'react-redux';
 
-export class SendConfrmScreen extends Component {
+export class SendConfirmScreen extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       title: 'Confirm',
@@ -73,4 +73,4 @@ const mapStateToProps = state => {
   };
 }
 
-export default connect(mapStateToProps, actions)(SendConfrmScreen);
+export default connect(mapStateToProps, actions)(SendConfirmScreen);

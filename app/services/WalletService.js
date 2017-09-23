@@ -1,5 +1,5 @@
 import { getAccountsFromWIFKey, generatePrivateKey, getWIFFromPrivateKey, getBalance, sendAssetTransaction,
-  getTransactionHistory, getMarketPriceUSD, getClaimAmounts, getWalletDBHeight } from 'neon-js/lib/neon-web';
+  doClaimAllGas, getTransactionHistory, getMarketPriceUSD, getClaimAmounts, getWalletDBHeight } from 'neon-js/lib/neon-web';
 
 export default {
   createWallet() {
@@ -55,8 +55,41 @@ export default {
       });
   },
 
+  sendAssetTransaction(network, address, wif, asset, amount) {
+    return new Promise(async (resolve, reject) => {
+      const sendResponse = await sendAssetTransaction(network, address, wif, asset, amount);
+      return sendResponse.error ? reject(sendResponse) : resolve(sendResponse);
+    });
+  },
+
+  claimGas(network, ownAddress, wif, amount, available) {
+    return new Promise(async (resolve, reject) => {
+      async function executeClaim() {
+        const claimResponse = await doClaimAllGas(network, wif)
+        return claimResponse.error ? reject(claimResponse) : resolve(claimResponse);
+      }
+
+      if (amount === 0) {
+        return executeClaim();
+      }
+
+      console.log('claimGas: Sending Neo to self');
+      await this.sendAssetTransaction(network, ownAddress, wif, 'Neo', amount);
+
+      (async function pollClaims() {
+        console.log('claimGas: Polling - currently available: ', available)
+        const response = await getClaimAmounts(network, ownAddress);
+        console.log('claimGas: Polling - got available: ', response.available)
+        if (response.available > available) {
+          console.log('claimGas: Executing gas claim ');
+          return executeClaim();
+        }
+        setTimeout(pollClaims, 10000);
+      })();
+    })
+  },
+
   getMarketPriceUSD,
   getClaimAmounts,
   getWalletDBHeight,
-  sendAssetTransaction,
 }

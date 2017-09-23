@@ -11,16 +11,13 @@ export const slice = 'sendScreen';
 export default function sendScreen(state = initialState, action) {
   switch (action.type) {
     case c.SEND_ASSET:
-      return { ...state, sending: true };
+      return { ...state, sending: true, error: false };
 
     case c.SEND_ASSET_RESPONSE:
-      if (action.error) {
-        return { ...state, sending: false, error: true };
-      }
       return {
         ...state,
         sending: false,
-        error: false,
+        error: !!action.error,
         response: action.payload
       };
 

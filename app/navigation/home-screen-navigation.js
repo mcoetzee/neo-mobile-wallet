@@ -4,7 +4,7 @@ import { StackNavigator, NavigationActions } from 'react-navigation';
 import HomeScreen from '../modules/home-screen';
 import PublicAddressScreen from '../modules/public-address-screen';
 import SendScreen from '../modules/send-screen';
-import SendScreenScreen from '../modules/send-confirm-screen';
+import SendConfirmScreen from '../modules/send-confirm-screen';
 
 export default StackNavigator(
   {
@@ -18,7 +18,7 @@ export default StackNavigator(
     SendStack: {
       screen: StackNavigator({
         Send: { screen: SendScreen },
-        SendConfrm: { screen: SendScreenScreen },
+        SendConfirm: { screen: SendConfirmScreen },
       }),
       navigationOptions: { header: null }
     },

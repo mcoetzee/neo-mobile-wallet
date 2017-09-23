@@ -1,2 +1,2 @@
-import SendConfrmScreen from './SendConfrmScreen';
-export default SendConfrmScreen;
+import SendConfirmScreen from './SendConfirmScreen';
+export default SendConfirmScreen;

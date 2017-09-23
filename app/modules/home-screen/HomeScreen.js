@@ -95,7 +95,7 @@ export class HomeScreen extends Component {
   }
 
   render() {
-    const { balance, address, claim, markets } = this.props;
+    const { balance, address, claim, markets, network, claimGas } = this.props;
     return (
       <Screen
         refreshing={this.state.loading}
@@ -120,7 +120,14 @@ export class HomeScreen extends Component {
         </View>
 
         <View style={{ paddingTop: 20, flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-          <Button type="primary" disabled={!claim.amount}>Claim {claim.amount} GAS</Button>
+          <Button
+            type="primary"
+            disabled={!claim.amount && !claim.loading}
+            onPress={() => claimGas(network)}
+            busy={claim.claiming && 'Claiming...'}
+          >
+            Claim {claim.amount} GAS
+          </Button>
         </View>
 
         <View style={{ paddingTop: 20 }}>

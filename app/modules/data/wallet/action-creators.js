@@ -50,7 +50,37 @@ export function sendAsset(network, toAddress, fromWif, asset, amount) {
   return dispatch => {
     dispatch({ type: c.SEND_ASSET, payload: { network, toAddress, fromWif, asset, amount }});
     return WalletService.sendAssetTransaction(network, toAddress, fromWif, asset, amount)
-      .then(response => dispatch({ type: c.SEND_ASSET_RESPONSE, payload: response }))
+      .then(response =>
+        dispatch({
+          type: c.SEND_ASSET_RESPONSE,
+          payload: response,
+          meta: {
+            toast: {
+              message: 'Transaction successful! Your balance will update when the blockchain has processed it',
+              delay: 600
+            }
+          }
+        })
+      )
       .catch(err => dispatch({ type: c.SEND_ASSET_RESPONSE, error: true, payload: err }));
+  };
+}
+
+export function claimGas(network) {
+  return (dispatch, getState) => {
+    const { address, balance, claim } = getState().data.wallet;
+
+    dispatch({ type: c.CLAIM_GAS, payload: { network }});
+    return WalletService.claimGas(network, address.public, address.wif, balance.neo, claim.available)
+      .then(response =>
+        dispatch({
+          type: c.CLAIM_GAS_RESPONSE,
+          payload: response,
+          meta: {
+            toast: { message: 'Gas claim successful! Your balance will update when the blockchain has processed it' }
+          }
+        })
+      )
+      .catch(err => dispatch({ type: c.CLAIM_GAS_RESPONSE, error: true, payload: err }));
   };
 }

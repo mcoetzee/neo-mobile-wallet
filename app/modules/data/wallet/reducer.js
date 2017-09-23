@@ -63,8 +63,24 @@ function claim(state = {}, action) {
         ...state,
         loading: false,
         updatedAt: new Date().toLocaleString(),
+        available: action.payload.available,
         amount: (action.payload.available + action.payload.unavailable) / 100000000,
         ...action.payload
+      };
+
+    case c.CLAIM_GAS:
+      return { ...state, claiming: true };
+
+    case c.CLAIM_GAS_RESPONSE:
+      if (action.error) {
+        return { ...state, claiming: false, claimError: true };
+      }
+
+      return {
+        ...state,
+        claiming: false,
+        claimError: false,
+        claimedAt: new Date().toLocaleString(),
       };
 
     default:
