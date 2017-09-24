@@ -10,8 +10,9 @@ import * as actions from './action-creators';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Title from './Title';
-import Toast from 'react-native-root-toast';
 import Markets from './Markets';
+import GasClaimer from './GasClaimer';
+import Toast from 'react-native-root-toast';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import QRCode from 'react-native-qrcode';
@@ -119,18 +120,9 @@ export class HomeScreen extends Component {
           </Text>
         </View>
 
-        <View style={{ paddingTop: 20, flex: 1, flexDirection: 'row', justifyContent: 'center' }}>
-          <Button
-            type="primary"
-            disabled={!claim.amount && !claim.loading}
-            onPress={() => claimGas(network)}
-            busy={claim.claiming && 'Claiming...'}
-          >
-            Claim {claim.amount} GAS
-          </Button>
-        </View>
+        <GasClaimer claim={claim} network={network} onGasClaim={claimGas} />
 
-        <View style={{ paddingTop: 20 }}>
+        <View style={{ paddingTop: 10 }}>
           <Row style={{ paddingLeft: 0 }} onPress={() => this.props.navigation.navigate('PublicAddress')}>
             <View style={{ flex: 1, flexDirection: 'row' }}>
               <Animatable.View animation="fadeIn">

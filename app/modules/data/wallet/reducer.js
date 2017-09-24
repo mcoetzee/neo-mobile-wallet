@@ -69,7 +69,10 @@ function claim(state = {}, action) {
       };
 
     case c.CLAIM_GAS:
-      return { ...state, claiming: true };
+      return { ...state, claiming: true, progress: '' };
+
+    case c.CLAIM_GAS_PROGRESS:
+      return { ...state, progress: action.payload };
 
     case c.CLAIM_GAS_RESPONSE:
       if (action.error) {

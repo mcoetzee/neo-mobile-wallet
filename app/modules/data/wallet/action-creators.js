@@ -71,7 +71,15 @@ export function claimGas(network) {
     const { address, balance, claim } = getState().data.wallet;
 
     dispatch({ type: c.CLAIM_GAS, payload: { network }});
-    return WalletService.claimGas(network, address.public, address.wif, balance.neo, claim.available)
+    return WalletService
+      .claimGas(
+        network,
+        address.public,
+        address.wif,
+        balance.neo,
+        claim.available,
+        update => dispatch({ type: c.CLAIM_GAS_PROGRESS, payload: update })
+      )
       .then(response =>
         dispatch({
           type: c.CLAIM_GAS_RESPONSE,
