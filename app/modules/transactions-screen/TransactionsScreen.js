@@ -35,6 +35,7 @@ export class TransactionsScreen extends Component {
 
   constructor(props) {
     super(props);
+    this.state = { loading: false };
     this.handleLoad = this.handleLoad.bind(this);
     this.handlePress = this.handlePress.bind(this);
   }
@@ -44,8 +45,9 @@ export class TransactionsScreen extends Component {
   }
 
   handleLoad() {
-    const { loadTransactionHistory, network, address } = this.props;
-    loadTransactionHistory(network, address.public);
+    const { refresh, network, address } = this.props;
+    this.setState({ loading: true });
+    refresh(network, address.public).then(() => this.setState({ loading: false }));
   }
 
   handlePress(txid) {
@@ -59,7 +61,7 @@ export class TransactionsScreen extends Component {
     const { transactions } = this.props;
     return (
       <Screen
-        refreshing={!!transactions.loading}
+        refreshing={this.state.loading}
         onRefresh={this.handleLoad}
         style={{ paddingTop: 24 }}
       >
@@ -90,4 +92,3 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps, actions)(TransactionsScreen);
-

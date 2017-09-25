@@ -56,16 +56,9 @@ export class HomeScreen extends Component {
   }
 
   handleLoad() {
+    const { refresh, network, address } = this.props;
     this.setState({ loading: true });
-    const { loadBalance, loadGasClaim, loadNeoMarketData, loadGasMarketData, network, address } = this.props;
-    Promise.all([
-      loadBalance(network, address.public),
-      loadGasClaim(network, address.public),
-      loadNeoMarketData(),
-      loadGasMarketData()
-    ]).then(() => {
-      this.setState({ loading: false });
-    })
+    refresh(network, address.public).then(() => this.setState({ loading: false }));
   }
 
   componentWillReceiveProps(nextProps) {

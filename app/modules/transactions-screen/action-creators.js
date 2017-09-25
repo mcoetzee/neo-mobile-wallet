@@ -1,1 +1,1 @@
-export { loadTransactionHistory } from '../data/wallet';
+export { refresh } from '../data';

@@ -2,9 +2,9 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import rootReducer from './modules/root-reducer';
-import { toastMiddleware } from './middleware'
+import { toastMiddleware, walletSyncMiddleware } from './middleware'
 
-const middleware = [thunk, toastMiddleware];
+const middleware = [thunk, toastMiddleware, walletSyncMiddleware];
 
 if (process.env.NODE_ENV !== 'production') {
   middleware.push(logger);

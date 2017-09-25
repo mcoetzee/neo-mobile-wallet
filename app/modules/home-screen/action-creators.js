@@ -1,2 +1,2 @@
-export { loadBalance, loadGasClaim, claimGas, loadTransactionHistory } from '../data/wallet';
-export { loadNeoMarketData, loadGasMarketData } from '../data/markets';
+export { claimGas } from '../data/wallet';
+export { refresh } from '../data';

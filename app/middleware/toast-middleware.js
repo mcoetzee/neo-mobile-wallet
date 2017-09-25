@@ -1,5 +1,5 @@
 import Toast from 'react-native-root-toast';
-import { colors } from './styles';
+import { colors } from '../styles';
 
 export const toastMiddleware = store => next => action => {
   if (action.meta && action.meta.toast) {
