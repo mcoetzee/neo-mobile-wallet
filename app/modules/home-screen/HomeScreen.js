@@ -12,6 +12,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Title from './Title';
 import Markets from './Markets';
 import GasClaimer from './GasClaimer';
+import Holdings from './Holdings';
 import Toast from 'react-native-root-toast';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -77,17 +78,6 @@ export class HomeScreen extends Component {
     }
   }
 
-  getTotalUSDValue() {
-    const { balance, markets } = this.props;
-    if (balance.neo && balance.gas && markets.neo.price_usd && markets.gas.price_usd) {
-      return (
-        balance.neo * parseFloat(markets.neo.price_usd) +
-        balance.gas * parseFloat(markets.gas.price_usd)
-      ).toFixed(2).toString();
-    }
-    return '-';
-  }
-
   render() {
     const { balance, address, claim, markets, network, claimGas } = this.props;
     return (
@@ -96,23 +86,7 @@ export class HomeScreen extends Component {
         onRefresh={this.handleLoad}
         style={{ paddingTop: 64 }}
       >
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-          <View style={{ width: 150 }}>
-            <Text type="primary" style={screenStyles.symbol}>NEO</Text>
-            <Text style={screenStyles.amount}>{balance.neo}</Text>
-          </View>
-          <View style={{ width: 150 }}>
-            <Text type="primary" style={screenStyles.symbol}>GAS</Text>
-            <Text style={screenStyles.amount}>{balance.gas && balance.gas.toFixed(3)}</Text>
-          </View>
-        </View>
-
-        <View style={{ paddingTop: 20 }}>
-          <Text type="secondary" style={screenStyles.symbol}>
-            US ${this.getTotalUSDValue()}
-          </Text>
-        </View>
-
+        <Holdings balance={balance} markets={markets} />
         <GasClaimer claim={claim} network={network} onGasClaim={claimGas} />
 
         <View style={{ paddingTop: 10 }}>

@@ -40,10 +40,6 @@ export class TransactionsScreen extends Component {
     this.handlePress = this.handlePress.bind(this);
   }
 
-  componentDidMount() {
-    this.handleLoad();
-  }
-
   handleLoad() {
     const { refresh, network, address } = this.props;
     this.setState({ loading: true });
