@@ -20,4 +20,6 @@ export default {
 
   SEND_ASSET: 'wallet/SEND_ASSET',
   SEND_ASSET_RESPONSE: 'wallet/SEND_ASSET_RESPONSE',
+
+  LOG_OUT: 'wallet/LOG_OUT',
 }

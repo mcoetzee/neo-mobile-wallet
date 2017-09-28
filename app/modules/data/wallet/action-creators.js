@@ -92,3 +92,7 @@ export function claimGas(network) {
       .catch(err => dispatch({ type: c.CLAIM_GAS_RESPONSE, error: true, payload: err }));
   };
 }
+
+export function logOut() {
+  return { type: c.LOG_OUT };
+}

@@ -112,4 +112,13 @@ function transactions(state = { data: [] }, action) {
   }
 }
 
-export default combineReducers({ address, balance, claim, transactions });
+const combined = combineReducers({ address, balance, claim, transactions });
+
+export default function(state, action) {
+  switch (action.type) {
+    case c.LOG_OUT:
+      return combined(undefined, action);
+    default:
+      return combined(state, action);
+  }
+}
