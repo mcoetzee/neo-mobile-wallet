@@ -89,7 +89,19 @@ export function claimGas(network) {
           }
         })
       )
-      .catch(err => dispatch({ type: c.CLAIM_GAS_RESPONSE, error: true, payload: err }));
+      .catch(err =>
+        dispatch({
+          type: c.CLAIM_GAS_RESPONSE,
+          payload: err,
+          error: true,
+          meta: {
+            toast: {
+              message: 'Something went wrong claiming gas',
+              type: 'error'
+            }
+          }
+        })
+      );
   };
 }
 

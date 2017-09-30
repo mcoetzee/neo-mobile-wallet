@@ -100,7 +100,7 @@ export default {
           console.log('claimGas: Polling - got available: ', response.available)
         } catch (e) {
           console.log('Error getting claim amounts: ', e);
-          if (pollRetryCount == 2) {
+          if (pollRetryCount === 2) {
             return reject(e);
           }
           pollRetryCount++;
