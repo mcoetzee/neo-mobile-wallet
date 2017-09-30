@@ -57,16 +57,26 @@ export default {
 
   sendAssetTransaction(network, address, wif, asset, amount) {
     return new Promise(async (resolve, reject) => {
-      const sendResponse = await sendAssetTransaction(network, address, wif, asset, amount);
-      return sendResponse.error ? reject(sendResponse) : resolve(sendResponse);
+      try {
+        const sendResponse = await sendAssetTransaction(network, address, wif, asset, amount);
+        return isError(sendResponse) ? reject(sendResponse) : resolve(sendResponse);
+      } catch (e) {
+        console.log(`Error sending ${amount} ${asset}:`, e);
+        reject(e);
+      }
     });
   },
 
   claimGas(network, ownAddress, wif, amount, available, onProgress) {
     return new Promise(async (resolve, reject) => {
       async function executeClaim() {
-        const claimResponse = await doClaimAllGas(network, wif)
-        return claimResponse.error ? reject(claimResponse) : resolve(claimResponse);
+        try {
+          const claimResponse = await doClaimAllGas(network, wif)
+          return isError(claimResponse) ? reject(claimResponse) : resolve(claimResponse);
+        } catch (e) {
+          console.log('Error executing gas claim: ', e);
+          reject(e);
+        }
       }
 
       if (amount === 0) {
@@ -74,17 +84,33 @@ export default {
       }
 
       onProgress('Sending Neo to self (Step 1/3)');
-      await this.sendAssetTransaction(network, ownAddress, wif, 'Neo', amount);
+      try {
+        await this.sendAssetTransaction(network, ownAddress, wif, 'Neo', amount);
+      } catch (e) {
+        return reject(e);
+      }
 
+      let pollRetryCount = 0;
       onProgress('Waiting for transaction to clear (Step 2/3)');
       (async function pollClaims() {
         console.log('claimGas: Polling - currently available: ', available)
-        const response = await getClaimAmounts(network, ownAddress);
-        console.log('claimGas: Polling - got available: ', response.available)
+        let response = {};
+        try {
+          response = await getClaimAmounts(network, ownAddress);
+          console.log('claimGas: Polling - got available: ', response.available)
+        } catch (e) {
+          console.log('Error getting claim amounts: ', e);
+          if (pollRetryCount == 2) {
+            return reject(e);
+          }
+          pollRetryCount++;
+        }
+
         if (response.available > available) {
           onProgress('Executing claim (Step 3/3)');
           return executeClaim();
         }
+
         setTimeout(pollClaims, 10000);
       })();
     })
@@ -93,4 +119,8 @@ export default {
   getMarketPriceUSD,
   getClaimAmounts,
   getWalletDBHeight,
+}
+
+function isError(response) {
+  return response.error || response.result === false || response.result === undefined;
 }
