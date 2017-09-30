@@ -8,10 +8,12 @@ import IonIcon from 'react-native-vector-icons/Ionicons';
 import TextInput from '../../components/text-input';
 import Text from '../../components/text';
 import Button, { InlineButton } from '../../components/button';
+import AvailableAmounts from './AvailableAmounts';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import * as Animatable from 'react-native-animatable';
 import validate from './validation';
+import { loadBalance } from './action-creators';
 
 class SendScreen extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -49,15 +51,22 @@ class SendScreen extends Component {
     );
   }
 
+  componentDidMount() {
+    const { network, address, loadBalance } = this.props;
+    loadBalance(network, address.public);
+  }
+
   componentWillReceiveProps(nextProps) {
     const { response } = nextProps;
     if (response === this.props.response) {
       return;
     }
     if (nextProps.error) {
-      if (response.error) {
+      const { error } = response;
+      if (error || response.result === false) {
         this.setState({
-          failureMessage: 'Transaction failed. ' + (response.error.message || 'Something went wrong processing this transaction')
+          failureMessage: 'Transaction failed. ' +
+            ((error && error.message) || 'Something went wrong processing this transaction')
         });
       } else {
         this.handleChange({
@@ -74,7 +83,7 @@ class SendScreen extends Component {
 
   handleChange = update => {
     this.setState(state => {
-      return validate({ ...state, ...update }, this.props.balance)
+      return validate({ ...state, failureMessage: '', ...update }, this.props.balance)
     });
   }
 
@@ -88,6 +97,7 @@ class SendScreen extends Component {
   }
 
   render() {
+    const { balance } = this.props;
     const { address, asset, amount, showMessages, messages, failureMessage } = this.state;
 
     return (
@@ -107,7 +117,7 @@ class SendScreen extends Component {
           placeholder="Enter the address to send to"
           value={address}
           onChangeText={text => this.handleChange({ address: text.trim() })}
-          returnKeyType="done"
+          returnKeyType="next"
           onSubmitEditing={() => this.amountInput.focus()}
         />
         {showMessages && !!messages.address &&
@@ -125,13 +135,12 @@ class SendScreen extends Component {
             marginTop: 10,
             flex: 1,
             flexDirection: 'row',
-            borderBottomColor: colors.grey,
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            paddingBottom: 10
+            paddingBottom: 10,
           }
         }>
           <InlineButton
             onPress={() => this.handleChange({ asset: 'Neo' })}
+            styles={{ paddingLeft: 0 }}
           >
             <Text style={asset === 'Neo' ? selectedAssetStyle : assetStyle}>
               NEO
@@ -146,6 +155,8 @@ class SendScreen extends Component {
             </Text>
           </InlineButton>
         </View>
+
+        <AvailableAmounts asset={asset} balance={balance} />
 
         <View style={{ marginTop: 20 }}>
           <Text>Amount</Text>
@@ -193,8 +204,10 @@ const assetStyle = {
 const mapStateToProps = state => {
   return {
     balance: state.data.wallet.balance,
+    address: state.data.wallet.address,
+    network: state.data.network,
     ...state.sendScreen,
   };
 }
 
-export default connect(mapStateToProps)(SendScreen);
+export default connect(mapStateToProps, { loadBalance })(SendScreen);

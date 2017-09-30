@@ -3,13 +3,13 @@ import { colors } from '../../styles';
 
 export default StyleSheet.create({
   'default': {
-    color: '#fff'
+    color: colors.white
   },
   primary: {
     color: colors.primaryGreen,
   },
   secondary: {
     fontSize: 10,
-    color: '#888888'
+    color: colors.grey
   }
 });
